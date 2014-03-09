@@ -1,3 +1,4 @@
+from flask import Flask
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 
 class Project(db.Model):

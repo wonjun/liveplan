@@ -9,8 +9,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def admin_dashboard():
+    projects = Project.query.all()    
+    return render_template('index.html', projects=projects)
 
 
 @app.route('/robots.txt')
