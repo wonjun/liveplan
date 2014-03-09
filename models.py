@@ -36,7 +36,7 @@ class Task(db.Model):
     def __repr__(self):
         return self.task_name + "'s description: " + self.short_description
 
-class Volunteers(db.Model):
+class Volunteer(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(40), unique=True)
     phone = Column(String(15), unique=True)
