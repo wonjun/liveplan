@@ -6,5 +6,8 @@ SQLAlchemy
 Werkzeug
 argparse
 gunicorn
+httplib2
 itsdangerous
+six
+twilio
 wsgiref
