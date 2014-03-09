@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, Text
 from database import Base
 from app import db
@@ -45,6 +47,10 @@ class Task(Base):
     def __repr__(self):
         return self.task_name + "'s description: " + self.short_description
 
+    @property
+    def end_time(self):
+        return self.start_time + datetime.timedelta(minutes=self.duration)
+
 
 class Volunteer(Base):
     __tablename__ = 'volunteer'
@@ -54,12 +60,17 @@ class Volunteer(Base):
     phone = Column(String(15), nullable=False)
     tasks = db.relationship('Task', secondary=tasks, backref='volunteers', lazy='dynamic')
 
-    def __init__(self, name, phone):
+    def __init__(self, project_id, name, phone, tasks):
+        self.project_id = project_id
         self.name = name
         self.phone = phone
+        self.tasks = tasks
 
     def __repr__(self):
         return "Volunteer name: " + self.name + "Phone Number: " + self.phone
 
     def is_busy(self):
         return False
+
+    def list_tasks(self):
+        return
