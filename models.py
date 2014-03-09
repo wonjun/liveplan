@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
-from app import db
+from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, Text
 from database import Base
-
+from app import db
 
 class Project(Base):
     __tablename__ = 'project'
@@ -17,9 +16,9 @@ class Project(Base):
         return "Project name: " + self.name
 
 
-tasks = db.Table('assignment',
-    db.Column('task_id', db.Integer, db.ForeignKey('task.id')),
-    db.Column('volunteer_id', db.Integer, db.ForeignKey('volunteer.id'))
+tasks = db.Table('assignment', Base.metadata,
+    db.Column('task_id', Integer, ForeignKey('task.id')),
+    db.Column('volunteer_id', Integer, ForeignKey('volunteer.id'))
 )
 
 
@@ -53,8 +52,7 @@ class Volunteer(Base):
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
     name = Column(String(40), nullable=False)
     phone = Column(String(15), nullable=False)
-    tasks = db.relationship('Task', secondary=tasks,
-        backref=db.backref('volunteers', lazy='dynamic'))
+    tasks = db.relationship('Task', secondary=tasks, backref='volunteers', lazy='dynamic')
 
     def __init__(self, name, phone):
         self.name = name

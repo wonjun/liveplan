@@ -3,9 +3,9 @@ import os
 from flask import Flask
 from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
-from models import *
 
 from database import db_session
+from models import *
 
 IS_HEROKU = 'IS_HEROKU' in os.environ
 
@@ -13,8 +13,9 @@ app = Flask(__name__)
 if IS_HEROKU:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s/db/test.db' % os.path.dirname(os.path.realpath(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s/db/test.db' % os.path.dirname(os.path.realpath(__file__))
 db = SQLAlchemy(app)
+
 
 @app.route('/')
 def home(admin=None):
@@ -23,7 +24,7 @@ def home(admin=None):
 @app.route('/admin_dashboard')
 def admin_dashboard():
     # look at models functions later to change
-    projects = Project.query.all()    
+    projects = Project.query.all()
     return render_template('admin_dashboard.html', projects=projects)
 
 @app.route('/admin_dashboard/create_project')
@@ -53,7 +54,7 @@ def project_tasks(project = None, action = None):
         return render_template('create_task.html', project=project)
     elif action == None:
         tasks = Task.query.all()
-        volunteers = Volunteer.query.all()    
+        volunteers = Volunteer.query.all()
         return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers)
     else:
         abort(404)
