@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from app import db
+from database import Base
 
 
-class Project(db.Model):
+class Project(Base):
+    __tablename__ = 'project'
     id = Column(Integer, primary_key=True)
     name = Column(String(80), nullable=False)
     description = Column(Text)
@@ -21,7 +23,8 @@ tasks = db.Table('assignment',
 )
 
 
-class Task(db.Model):
+class Task(Base):
+    __tablename__ = 'task'
     id = Column(Integer, primary_key=True)
     task_name = Column(String(160), nullable=False)
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
@@ -44,7 +47,8 @@ class Task(db.Model):
         return self.task_name + "'s description: " + self.short_description
 
 
-class Volunteer(db.Model):
+class Volunteer(Base):
+    __tablename__ = 'volunteer'
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
     name = Column(String(40), nullable=False)
