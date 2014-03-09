@@ -4,8 +4,13 @@ from flask import Flask
 from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 
+IS_HEROKU = 'IS_HEROKU' in os.environ
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+if IS_HEROKU:
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s/db/test.db' % os.path.dirname(os.path.realpath(__file__))
 db = SQLAlchemy(app)
 
 @app.route('/')
