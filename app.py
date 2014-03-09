@@ -178,21 +178,27 @@ def parse_received_texts(from_number, received_text):
         else:
             response = parsed_received_text[0]
     elif len(parsed_received_text) == 2:
+        print "====== length 2 ======="
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
+        print "===== " + task_id + " ======="
         task = more_task(task_id)
         if task == None:
             response = 'Invalid Command2'
         elif command == 'finish':
+            print "====== finish ======="
             finish_task(volunteer.id, task_id)
             response = 'Task successfully completed.'
         elif command == 'accept':
+            print "====== accept ======="
             accept_task(volunteer.id, task_id)
             response = 'Task successfully accepted.'
         elif command == 'reject':
+            print "====== reject ======="
             response = 'Rejected task.'
             pass
         elif command == 'more':
+            print "====== more ======="
             response = task.task_name + ": " + task.short_description + "\n"
             response += task.long_description
         else:
