@@ -1464,6 +1464,7 @@ meta.foundation-mq-topbar {
       margin-top: 45px; }
 
 .top-bar {
+  z-index: 100;
   overflow: hidden;
   height: 45px;
   line-height: 45px;

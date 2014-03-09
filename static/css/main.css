@@ -1,0 +1,48 @@
+.bg {
+  width: 100%;
+  height: 768px;
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: -2;
+}
+
+.overlay {
+  opacity: .55;
+  background-color: black;
+  position: absolute;
+  left: 0; top: 0; height: 1000px; width: 100%;
+  z-index: 1;
+}
+
+.bg img {
+  filter: brightness(50%);
+}
+
+.login {
+  margin-top:  20%;
+  color: white;
+}
+
+.welcome {
+  text-align: center;
+  padding-bottom: 45px;
+  height: 1px;
+  border-top: 1px solid black;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.welcome span {
+  font-family: "Georgia";
+  font-style: italic;
+  font-weight: 300;
+  display:inline-block;
+  color:white;
+  font-size: 60px;
+
+  margin-top: 10%;
+  position: relative;
+  top: -11px;
+}
