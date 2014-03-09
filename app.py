@@ -108,6 +108,9 @@ def create_task(project = None, methods=['GET', 'POST']):
             t = Task(request.form['name'], request.form['start_time'], request.form['duration'], request.form['short_description'], request.form['long_description'], request.form['max_volunteers'])
             db.session.add(t)
             db.session.commit()
+            message = 'New task, ' + t.task_name + " (" + t.id + "), at " + t.start_time + "for " + t.max_volunteers
+            for volunteer in list_project_volunteers(project):
+                twilio.send_text(volunteer.phone, twilio_api.FROM_NUMBER, message)
             flash('You have successfully created a task!')
             return redirect(url_for('admin_dashboard, project=project')) # + project.id))
     return render_template('create_task.html', error=error, pid=project)
@@ -139,47 +142,47 @@ app.secret_key = SECRET_KEY
 
 @app.route("/receive_text", methods=['GET', 'POST'])
 def receive_text():
-    from_number = request.values.get('From', None)
-    message = request.values.get('Message', None)
-    # call parse_received_texts(from_number, message)
-    return
+    from_number = str(request.values.get('From', None))
+    message = str(request.values.get('Message', None))
+    return parse_received_texts(from_number, received_text)
 
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
+    volunteer = get_user_by_phone(from_number)
+    response = None
     if len(parsed_received_text) == 1:
         if parsed_received_text[0] == 'list':
-            # list all current tasks
-            response = 'list of tasks'
+            tasks = list_tasks(volunteer.id)
+            for task in tasks:
+                response += task.id + ": " + task.task_name + " - " + task.start_time + "\n"
         elif parsed_received_text[0] == 'available':
-            # list all non-assigned tasks sorted by priority
-            response = 'list of available tasks'
+            for (task_name, task_id, task_short) in open_tasks(volunteer.project_id):
+                response += task_name + "(" + task_id + "): " + task_short + "\n"
         else:
-            # invalid command
-            response = 'invalid command'
+            response = 'Invalid Command'
     elif len(parsed_received_text) == 2:
-        command = parsed_received_text[0]
-        task_id = parsed_received_text[1]
-        # if task_id does not exist:
-            # fail
         resp = twilio.twiml.Response()
-        if command == 'finish':
-            response = 'woohoo!'
-            # update server that task is done
+        command = parsed_received_text[0]
+        task_id = int(parsed_received_text[1])
+        task = more_task(task_id)
+        if task == None:
+            response = 'Invalid Command'
+        elif command == 'finish':
+            finish_task(volunteer.id, task_id)
+            response = 'Task successfully completed.'
         elif command == 'accept':
-            # update server that user accepted task
-            response = 'confirmation message'
+            accept_task(volunteer.id, task_id)
+            response = 'Task successfully accepted.'
         elif command == 'reject':
-            response = 'ok :/'
+            response = 'Rejected task.'
             pass
         elif command == 'more':
-            response = 'here is additional information'
-            # give additional info on task
+            response = task.task_name + ": " + task.short_description + "\n"
+            response += task.long_description
         else:
-            # invalid command
-            response = 'invalid command'
+            response = 'Invalid Command'
     else:
-        # invalid command
-        response = 'invalid command'
+        response = 'Invalid Command'
     resp.message(response)
     return str(resp)
 
