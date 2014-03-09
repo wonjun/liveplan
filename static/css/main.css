@@ -27,6 +27,9 @@
 .project-details{
   display: none;
 }
+.project-volunteer{
+  padding-left: 20px;
+}
 .panel-title{
   width: 75%;
   margin: auto;

@@ -26,6 +26,12 @@ SECRET_KEY = '\xf2v$@\xab\xbc\xfaw\x96\xbd\xa7~\x8f\xcc\xbaB\xe6\x82=9\x10&\x9b\
 app.config['USERNAME'] = 'admin'
 app.config['PASSWORD'] = 'default'
 
+def RepresentsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 @app.route('/')
 def home(admin=None):
@@ -41,7 +47,11 @@ def admin_dashboard():
     projects = db.session.query(models.Project).all()
     data = {}
     for project in projects:
-        data[project] = [list_project_tasks(project.id), list_project_volunteers(project.id)]
+        project_tasks = list_project_tasks(project.id)
+        task_tuple = []
+        for task in project_tasks:
+            task_tuple.append([task, list_volunteers_on_task(task.id)])
+        data[project] = [task_tuple, list_project_volunteers(project.id)]
     return render_template('admin_dashboard.html', data=data)
 
 @app.route('/admin_dashboard/create_project', methods=['GET', 'POST'])
@@ -151,15 +161,22 @@ app.secret_key = SECRET_KEY
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
     volunteer = get_user_by_phone(from_number)
+    if volunteer == None:
+        response = 'Unrecognized Volunteer Number'
     resp = twilio.twiml.Response()
     response = None
     if len(parsed_received_text) == 1:
-        if parsed_received_text[0] == 'list':
+        parsed_received_text[0] = parsed_received_text[0].lower()
+        if parsed_received_text[0] == 'help':
+            response += 'Available Commands:\n'
+            response += 'list OR available\n'
+            response += 'finish OR accept OR reject OR more + <id>'
+        elif parsed_received_text[0] == 'list':
             tasks = list_tasks(volunteer.id)
             if not tasks:
                 response = 'You currently have no tasks assigned'
             for task in tasks:
-                response += task.id + ": " + task.task_name + " - " + task.start_time + "\n"
+                response += str(task.id) + ": " + task.task_name + " - " + str(task.start_time) + "\n"
         elif parsed_received_text[0] == 'available':
             tasks = open_tasks(volunteer.project_id)
             if not tasks:
@@ -169,6 +186,8 @@ def parse_received_texts(from_number, received_text):
         else:
             response = 'Invalid Command'
     elif len(parsed_received_text) == 2:
+        if not RepresentsInt(parsed_received_text[1]):
+            response = 'Invalid Command'
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
         task = more_task(task_id)
@@ -203,7 +222,6 @@ def receive_text():
     message = str(request.values.get('Body', None))
     return parse_received_texts(from_number, message)
 
-
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
@@ -213,7 +231,12 @@ def list_tasks(volunteer_id):
     return db.session.query(models.Volunteer).get(volunteer_id).tasks
 
 def list_project_volunteers(project_id):
-    return db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
+    all_volunteers = db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
+    avail = []
+    for vol in all_volunteers:
+        if not list_tasks(vol.id):
+            avail.append(vol)
+    return avail
 
 def list_project_tasks(project_id):
     return db.session.query(models.Task).filter(models.Task.project_id==project_id).all()
