@@ -158,7 +158,7 @@ app.secret_key = SECRET_KEY
 @app.route("/receive_text", methods=['GET', 'POST'])
 def receive_text():
     from_number = str(request.values.get('From', None))
-    message = str(request.values.get('Message', None))
+    message = str(request.values.get('Body', None))
     print "==============="
     print message
     return parse_received_texts(from_number, message)
