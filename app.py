@@ -35,17 +35,17 @@ def home(admin=None):
         return render_template('index.html')
 
 def list_project_volunteers(project_id):
-    return models.Volunteer.query.filter(models.Volunteer.project_id==project_id).all()
+    return db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
 
 def list_project_tasks(project_id):
-    return models.Task.query.filter(models.Task.project_id==project_id).all()
+    return db.session.query(models.Task).filter(models.Task.project_id==project_id).all()
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
     # look at models functions later to change
-    projects = Project.query.all()
+    projects = db.session.query(models.Project).all()
     data = {}
-    
+
     for project in projects:
         data[project] = [list_project_tasks(project.id), list_project_volunteers(project.id)]
     return render_template('admin_dashboard.html', projects=projects, data=data)
@@ -70,8 +70,8 @@ def create_project():
 
 @app.route('/admin_dashboard/<project>')
 def project_page(project=None):
-    tasks = Task.query.all()
-    volunteers = Volunteer.query.all()
+    tasks = db.session.query(models.Task).all()
+    volunteers = db.session.query(models.Volunteer).all()
     return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers, project=project)
 
 @app.route('/admin_dashboard/<project>/detail_task')
@@ -209,7 +209,7 @@ def shutdown_session(exception=None):
 
 def list_tasks(volunteer_id):
     # 'list' all current tasks for volunteer
-    return models.Volunteer.query.get(volunteer_id).tasks
+    return db.session.query(models.Volunteer).get(volunteer_id).tasks
 
 def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
@@ -225,7 +225,7 @@ def finish_task(volunteer_id, task_id):
 
 def accept_task(volunteer_id, task_id):
     # add task with 'id' to list of assigned tasks
-    t = models.Task.query.get(task_id)
+    t = db.session.query(models.Task).get(task_id)
     db.engine.execute('INSERT INTO assignment VALUES (%s, %s)' % (str(task_id), str(volunteer_id)))
     db.session.commit()
     return t
@@ -235,10 +235,10 @@ def reject_task(volunteer_id, task_id):
     return None
 
 def more_task(task_id):
-    return models.Task.query.get(task_id)
+    return db.session.querymodels.Task().get(task_id)
 
 def get_user_by_phone(phone):
-    return models.Volunteer.query.filter(models.Volunteer.phone==phone).first()
+    return db.session.query(models.Volunteer).filter(models.Volunteer.phone==phone).first()
 
 def open_tasks(project_id):
     rows = db.engine.execute('select t.id, t.task_name, t.short_description from task t left join assignment a on t.id=a.task_id where t.project_id=%s EXCEPT select t.id, t.task_name, t.short_description from task t join assignment a on t.id=a.task_id where t.project_id=%s;' % (str(project_id), str(project_id)))
