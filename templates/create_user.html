@@ -8,7 +8,7 @@
       <h2 style="color: white;">Create Task</h2>
       {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
       {{ url_for('create_user', project=pid) }}
-      <form action="/admin_dashboard/{{pid}}/create_user" method=post>
+      <form action="{{ url_for('create_user', project=pid) }}" method=post>
       <dl>
         <dt>Name:
         <dd><input type=text name='name'>

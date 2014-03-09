@@ -64,13 +64,15 @@ def project_page(project=None):
     volunteers = Volunteer.query.all()
     return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers, project=project)
 
-@app.route('/admin_dashboard/<project>/<detail_task>')
+@app.route('/admin_dashboard/<project>/detail_task')
 def detail_task(project=None, task=None):
-    return render_template('project_tasks.html', project=project, task=task)
+    tasks = list_project_tasks(project)
+    return render_template('project_tasks.html',tasks=tasks)
 
-@app.route('/admin_dashboard/<project>/<detail_user>')
+@app.route('/admin_dashboard/<project>/detail_user')
 def detail_user(project=None, volunteer=None):
-    return render_template('project_users.html', project=project, volunteer=volunteer)
+    volunteers = list_project_volunteers(project)
+    return render_template('project_users.html', volunteers=volunteers)
 
 @app.route('/admin_dashboard/<project>/create_user', methods=['GET', 'POST'])
 def create_user(project=None):
@@ -148,11 +150,12 @@ app.secret_key = SECRET_KEY
 def receive_text():
     from_number = str(request.values.get('From', None))
     message = str(request.values.get('Message', None))
-    return parse_received_texts(from_number, received_text)
+    return parse_received_texts(from_number, message)
 
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
     volunteer = get_user_by_phone(from_number)
+    resp = twilio.twiml.Response()
     response = None
     if len(parsed_received_text) == 1:
         if parsed_received_text[0] == 'list':
@@ -165,7 +168,6 @@ def parse_received_texts(from_number, received_text):
         else:
             response = 'Invalid Command'
     elif len(parsed_received_text) == 2:
-        resp = twilio.twiml.Response()
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
         task = more_task(task_id)
@@ -189,6 +191,7 @@ def parse_received_texts(from_number, received_text):
         response = 'Invalid Command'
     resp.message(response)
     return str(resp)
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
