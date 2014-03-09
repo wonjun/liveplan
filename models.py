@@ -57,7 +57,7 @@ class Volunteer(Base):
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
     name = Column(String(40), nullable=False)
-    phone = Column(String(15), nullable=False)
+    phone = Column(String(15), nullable=False, unique=True)
     tasks = db.relationship('Task', secondary=tasks, backref='volunteers')
 
     def __init__(self, project_id, name, phone, tasks):

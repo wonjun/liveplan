@@ -124,14 +124,14 @@ def list_tasks(volunteer_id):
 
 def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
-    models.Volunteer.query.get(volunteer_id).tasks.remove(models.Task.query.get(task_id))
-    db.commit()
+    db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
+    db.session.commit()
 
 def accept_task(volunteer_id, task_id):
     # add task with 'id' to list of assigned tasks
     t = models.Task.query.get(task_id)
-    models.Volunteer.query.get(volunteer_id).tasks.add(models.Task.query.get(t))
-    db.commit()
+    db.engine.execute('INSERT INTO assignment VALUES (%s, %s)' % (str(task_id), str(volunteer_id)))
+    db.session.commit()
     return t
 
 def reject_task(volunteer_id, task_id):
@@ -140,4 +140,7 @@ def reject_task(volunteer_id, task_id):
 
 def more_task(task_id):
     return models.Task.query.get(task_id)
+
+def get_user_by_phone(phone):
+    return models.Volunteer.query.filter(Volunteer.phone==phone).first()
 
