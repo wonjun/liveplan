@@ -20,8 +20,20 @@
     $("#project-create").click(function () {
         $("#create-form").stop().slideToggle();
     });
-    $(".project").click(function(){
-        $(this).find(".project-details").stop().slideToggle();
+    $(".project-title").click(function(e){
+        $(this).parent().find(".project-details").stop().slideToggle();
+        e.stopImmediatePropogation();
+        return false;
+    });
+    $(".create_user").click(function(f){
+        $(this).parent().find(".create_user_form").stop().slideToggle();
+        f.stopImmediatePropogation();
+        return false;
+    });
+    $(".create_task").click(function(g){
+        $(this).parent().find(".create_task_form").stop().slideToggle();
+        g.stopImmediatePropogation();
+        return false;
     });
   </script>
 </body>

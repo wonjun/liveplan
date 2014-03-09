@@ -45,10 +45,9 @@ def admin_dashboard():
     # look at models functions later to change
     projects = db.session.query(models.Project).all()
     data = {}
-
     for project in projects:
         data[project] = [list_project_tasks(project.id), list_project_volunteers(project.id)]
-    return render_template('admin_dashboard.html', projects=projects, data=data)
+    return render_template('admin_dashboard.html', data=data)
 
 @app.route('/admin_dashboard/create_project', methods=['GET', 'POST'])
 def create_project():

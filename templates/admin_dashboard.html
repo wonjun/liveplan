@@ -18,23 +18,52 @@
             <div id="create-form">
             {% include "create_project.html" %}
             </div>
-            {% for project in projects %}
+            {% for project in data %}
                 <li>
                     <div class="project">
-                        <h4>{{ project.name }} </h4>
+                        <h4 class = "project-title">{{ project.name }} </h4>
                         <div class="project-details">
                             <div action = {{ url_for('detail_task', project=project.id)}}></div>
                             <ul>
-
-                                {% for key, value in data.iteritems() %}
-                                    <li> tasks: {{ value[0] }}</dt>
-                                    <li> volunteers: {{ value[1] }}</dd>
-                                {% endfor %}
-
-                                <li><a href="/admin_dashboard/{{project.id}}/detail_task" > Tasks </a></li>
-                                <li><a href="/admin_dashboard/{{project.id}}/detail_user" > Volunteer </a></li>
-                                <li><a href="/admin_dashboard/{{project.id}}/create_task" > Create Task </a></li>
-                                <li><a href="/admin_dashboard/{{project.id}}/create_user" > Assign Volunteer </a></li>
+                                <div class = "row">
+                                    <div class ="large-6 columns">
+                                        {% for task in data[project][0] %}
+                                        <li class ="project-task">
+                                            <b>Task:</b> {{task.id}}
+                                            <b>Short Description:</b> {{task.short_description}}
+                                        </li>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="large-6 columns">
+                                        {% for volunteer in data[project][1] %}
+                                        <li class ="project-volunteer">
+                                            <b>Volunteer:</b> {{volunteer.name}}
+                                            <b>ID:</b> {{volunteer.id}}
+                                            <b>Phone:</b> {{volunteer.phone}}
+                                        </li>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                  <div class="test">
+                                    <div class="large-4 columns">
+                                      <div class = "button create_user secondary"><h6 style="color: black;">Create Volunteer</h6></div>
+                                      <div class = "create_user_form">
+                                          {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+                                          <form action="{{ url_for('create_user', project=project.id) }}" method=post>
+                                          <dl>
+                                            <dt>Name:
+                                            <dd><input type=text name='name'>
+                                            <dt>Phone:
+                                            <dd><input type=text name='phone'>
+                                            <dd><input class="tiny secondary button" type=submit value='Create Volunteer'>
+                                          </dl>
+                                          </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <li><a href="/admin_dashboard/{{project.id}}/create_task" > Assign Volunteer </a></li>
                             </ul>
                         </div>
                     </div>
