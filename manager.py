@@ -57,9 +57,9 @@ def seed():
     db.session.commit()
     # Create Volunteers for this Project
     tasks = Task.query.filter_by(project_id=p1.id).all()
-    v1 = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='1234567890', tasks=[t1, t2, t3])
+    v1 = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='+11234567890', tasks=[t1, t2, t3])
     db.session.add(v1)
-    v2 = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='1234567899', tasks=[t2, t3])
+    v2 = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='+11234567899', tasks=[t2, t3])
     db.session.add(v2)
     db.session.commit()
     db.session.remove()
