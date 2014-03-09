@@ -25,10 +25,16 @@
                         <div class="project-details">
                             <div action = {{ url_for('detail_task', project=project.id)}}></div>
                             <ul>
-                            <li><a href="/admin_dashboard/{{project.id}}/detail_task" > Tasks </a></li>
-                            <li><a href="/admin_dashboard/{{project.id}}/detail_user" > Volunteer </a></li>
-                            <li><a href="/admin_dashboard/{{project.id}}/create_task" > Create Task </a></li>
-                            <li><a href="/admin_dashboard/{{project.id}}/create_user" > Assign Volunteer </a></li>
+
+                                {% for key, value in data.iteritems() %}
+                                    <li> tasks: {{ value[0] }}</dt>
+                                    <li> volunteers: {{ value[1] }}</dd>
+                                {% endfor %}
+
+                                <li><a href="/admin_dashboard/{{project.id}}/detail_task" > Tasks </a></li>
+                                <li><a href="/admin_dashboard/{{project.id}}/detail_user" > Volunteer </a></li>
+                                <li><a href="/admin_dashboard/{{project.id}}/create_task" > Create Task </a></li>
+                                <li><a href="/admin_dashboard/{{project.id}}/create_user" > Assign Volunteer </a></li>
                             </ul>
                         </div>
                     </div>

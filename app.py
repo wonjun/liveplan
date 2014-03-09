@@ -34,11 +34,21 @@ def home(admin=None):
     else:
         return render_template('index.html')
 
+def list_project_volunteers(project_id):
+    return models.Volunteer.query.filter(models.Volunteer.project_id==project_id).all()
+
+def list_project_tasks(project_id):
+    return models.Task.query.filter(models.Task.project_id==project_id).all()
+
 @app.route('/admin_dashboard')
 def admin_dashboard():
     # look at models functions later to change
     projects = Project.query.all()
-    return render_template('admin_dashboard.html', projects=projects)
+    data = {}
+    
+    for project in projects:
+        data[project] = [list_project_tasks(project.id), list_project_volunteers(project.id)]
+    return render_template('admin_dashboard.html', projects=projects, data=data)
 
 @app.route('/admin_dashboard/create_project', methods=['GET', 'POST'])
 def create_project():
@@ -226,12 +236,6 @@ def more_task(task_id):
 
 def get_user_by_phone(phone):
     return models.Volunteer.query.filter(models.Volunteer.phone==phone).first()
-
-def list_project_volunteers(project_id):
-    return models.Volunteer.query.filter(models.Volunteer.project_id==project_id).all()
-
-def list_project_tasks(project_id):
-    return models.Task.query.filter(models.Task.project_id==project_id).all()
 
 def open_tasks(project_id):
     rows = db.engine.execute('select t.id, t.task_name, t.short_description from task t left join assignment a on t.id=a.task_id where t.project_id=%s EXCEPT select t.id, t.task_name, t.short_description from task t join assignment a on t.id=a.task_id where t.project_id=%s;' % (str(project_id), str(project_id)))
