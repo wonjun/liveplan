@@ -127,6 +127,9 @@ def finish_task(volunteer_id, task_id):
     db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
     db.session.commit()
     rows = db.engine.execute('SELECT * FROM assignment WHERE task_id=%s' % str(task_id))
+    if not rows.scalar():
+        db.engine.execute('UPDATE task SET completed=1 WHERE id=%s' % str(task_id))
+        db.session.commit()
 
 def accept_task(volunteer_id, task_id):
     # add task with 'id' to list of assigned tasks
@@ -150,3 +153,7 @@ def list_project_volunteers(project_id):
 
 def list_project_tasks(project_id):
     return models.Task.query.filter(models.Task.project_id==project_id).all()
+
+def open_tasks(project_id):
+    rows = db.engine.execute('select t.id, t.task_name, t.short_description from task t left join assignment a on t.id=a.task_id where t.project_id=%s EXCEPT select t.id, t.task_name, t.short_description from task t join assignment a on t.id=a.task_id where t.project_id=%s;' % (str(project_id), str(project_id)))
+    return rows.fetchall()
