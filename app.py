@@ -27,7 +27,7 @@ app.config['USERNAME'] = 'admin'
 app.config['PASSWORD'] = 'default'
 
 def RepresentsInt(s):
-    try: 
+    try:
         int(s)
         return True
     except ValueError:
@@ -231,7 +231,12 @@ def list_tasks(volunteer_id):
     return db.session.query(models.Volunteer).get(volunteer_id).tasks
 
 def list_project_volunteers(project_id):
-    return db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
+    all_volunteers = db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
+    avail = []
+    for vol in all_volunteers:
+        if not list_tasks(vol.id):
+            avail.append(vol)
+    return avail
 
 def list_project_tasks(project_id):
     return db.session.query(models.Task).filter(models.Task.project_id==project_id).all()
