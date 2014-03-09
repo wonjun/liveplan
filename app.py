@@ -34,17 +34,6 @@ def home(admin=None):
     else:
         return render_template('index.html')
 
-def list_project_volunteers(project_id):
-    all_volunteers = db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
-    avail_volunteers = []
-    for vol in all_volunteers:
-        print vol
-        if len(list_tasks(vol.id)) == 0:
-            avail_volunteers.append(vol)
-    return db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
-
-def list_project_tasks(project_id):
-    return db.session.query(models.Task).filter(models.Task.project_id==project_id).all()
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
@@ -187,7 +176,7 @@ def parse_received_texts(from_number, received_text):
         print "====== length 2 ======="
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
-        print "===== " + str(task_id) + " ======="
+        print "===== " + task_id + " ======="
         task = more_task(task_id)
         if task == None:
             response = 'Invalid Command2'
@@ -231,6 +220,16 @@ def list_tasks(volunteer_id):
     # 'list' all current tasks for volunteer
     return db.session.query(models.Volunteer).get(volunteer_id).tasks
 
+def list_project_volunteers(project_id):
+    return db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
+
+def list_project_tasks(project_id):
+    return db.session.query(models.Task).filter(models.Task.project_id==project_id).all()
+
+def list_volunteers_on_task(task_id):
+    rows = db.engine.execute('select v.id, v.name, v.phone from volunteer v join assignment a on v.id=a.volunteer_id where a.task_id=%s' % (str(project_id)))
+    return rows
+
 def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
     db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
@@ -255,7 +254,7 @@ def reject_task(volunteer_id, task_id):
     return None
 
 def more_task(task_id):
-    return db.session.querymodels.Task().get(task_id)
+    return db.session.query(models.Task).get(task_id)
 
 def get_user_by_phone(phone):
     return db.session.query(models.Volunteer).filter(models.Volunteer.phone==phone).first()
