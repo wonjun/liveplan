@@ -19,7 +19,6 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s/db/test.db' % os.path.dirname(os.path.realpath(__file__))
 db = SQLAlchemy(app)
 
-
 @app.route('/')
 def home(admin=None):
   return render_template('index.html')
