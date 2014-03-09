@@ -4,25 +4,43 @@
   left: 0;
   top: 0;
   position: absolute;
-  z-index: -2;
 }
 
+.panel {
+  background-color: rgba(255, 255, 255, .8);
+  margin-top: 60px;
+  border: none;
+}
+
+.panel-title{
+  width: 75%;
+  margin: auto;
+  margin-top: 50px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
 .overlay {
   opacity: .7;
-  background-color: gray;
+  background-color: black;
   position: absolute;
   left: 0; top: 0; height: 1000px; width: 100%;
-  z-index: 1;
 }
 .overlay2 {
-  background-color: #CCCCCC;
+  opacity: .7;
+  background-color: white;
   position: absolute;
   left: 0; top: 0; height: 1000px; width: 100%;
-  z-index: -1;
 }
 
-.bg img {
-  filter: brightness(50%);
+li {
+  list-style-type: none;
+}
+.project {
+  list-style-type: none;
+  padding: 10px;
+  margin-top: 10px;
+  border: 2px;
+  background-color: #C8C8C8;
 }
 
 .login {
@@ -50,4 +68,17 @@
   margin-top: 10%;
   position: relative;
   top: -11px;
+}
+
+.dashboard-title {
+  display: block;
+  text-align: center;
+  font-family: "helvetica";
+  font-weight: 300;
+  color:black;
+  width: 75%;
+  font-size: 60px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 0 auto;
 }

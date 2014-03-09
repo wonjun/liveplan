@@ -1,13 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="overlay2"></div>
-Admin Dashboard
-
-{% for project in projects %}
-    <li><a href="/admin_dashboard/{{project.id}}" > {{ project.name }} </a>
-</li>
-{% endfor %}
-
+<div class="bg">
+  <div class="overlay2"></div>
+  <img src="static/img/splash.jpg"/>
+</div>
+<div class="row">
+    <div class="large-12 columns">
+        <div class = "panel panel-title">
+            <div class = "dashboard-title">
+                <div style="opacity: 1;">
+                <h1> Admin Dashboard </h1>
+                </div>
+            </div>
+        </div>
+        <div class = "panel">
+            {% for project in projects %}
+                <li>
+                    <div class="project">
+                        <a href="/admin_dashboard/<project>"> <h4>{{ project.name }} </h4></a>
+                    </div>
+                </li>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
