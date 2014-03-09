@@ -65,7 +65,7 @@
                                       </div>
                                       <div class = "create_task_form">
                                       {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-                                      <form action="{{ url_for('create_task', project=pid) }}" method=post>
+                                      <form action="{{ url_for('create_task', project=project.id) }}" method=post>
                                       <dl>
                                         <dt>Task Name:
                                         <dd><input type=text name='task_name'>
