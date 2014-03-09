@@ -8,7 +8,7 @@ from twilio_api import send_text
 import twilio.twiml
 
 from database import db_session
-from models import *
+import models
 
 IS_HEROKU = 'IS_HEROKU' in os.environ
 
@@ -110,7 +110,7 @@ def create_task(project = None, methods=['GET', 'POST']):
             flash('You have successfully created a task!')
             return redirect(url_for('admin_dashboard, project=project')) # + project.id))
     return render_template('create_task.html', error=error, pid=project)
-    
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -185,6 +185,39 @@ def parse_received_texts(from_number, received_text):
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
+
+def list_tasks(volunteer_id):
+    # 'list' all current tasks for volunteer
+    return models.Volunteer.query.get(volunteer_id).tasks
+
+def finish_task(volunteer_id, task_id):
+    # mark task with 'id' as finished
+    db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
+    db.session.commit()
+    rows = db.engine.execute('SELECT * FROM assignment WHERE task_id=%s' % str(task_id))
+
+def accept_task(volunteer_id, task_id):
+    # add task with 'id' to list of assigned tasks
+    t = models.Task.query.get(task_id)
+    db.engine.execute('INSERT INTO assignment VALUES (%s, %s)' % (str(task_id), str(volunteer_id)))
+    db.session.commit()
+    return t
+
+def reject_task(volunteer_id, task_id):
+    # reject task with 'id'
+    return None
+
+def more_task(task_id):
+    return models.Task.query.get(task_id)
+
+def get_user_by_phone(phone):
+    return models.Volunteer.query.filter(models.Volunteer.phone==phone).first()
+
+def list_project_volunteers(project_id):
+    return models.Volunteer.query.filter(models.Volunteer.project_id==project_id).all()
+
+def list_project_tasks(project_id):
+    return models.Task.query.filter(models.Task.project_id==project_id).all()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

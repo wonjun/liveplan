@@ -1,7 +1,8 @@
 import datetime
 
-from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, Text
-from database import Base
+
+from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, Text, Boolean
+from database import Base, engine
 from app import db
 
 class Project(Base):
@@ -34,8 +35,9 @@ class Task(Base):
     short_description = Column(String(160))
     long_description = Column(Text)
     max_volunteers = Column(Integer, nullable=False)
+    completed = Column(Boolean, nullable=False, default=False)
 
-    def __init__(self, task_name, project_id, start_time, duration, short_description, long_description, max_volunteers):
+    def __init__(self, task_name, project_id, start_time, duration, short_description, long_description, max_volunteers, completed=False):
         self.task_name = task_name
         self.project_id = project_id
         self.start_time = start_time
@@ -43,6 +45,7 @@ class Task(Base):
         self.short_description = short_description
         self.long_description = long_description
         self.max_volunteers = max_volunteers
+        self.completed = completed
 
     def __repr__(self):
         return self.task_name + "'s description: " + self.short_description
@@ -57,7 +60,7 @@ class Volunteer(Base):
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
     name = Column(String(40), nullable=False)
-    phone = Column(String(15), nullable=False)
+    phone = Column(String(15), nullable=False, unique=True)
     tasks = db.relationship('Task', secondary=tasks, backref='volunteers')
 
     def __init__(self, project_id, name, phone, tasks):
