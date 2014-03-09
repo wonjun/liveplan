@@ -1,7 +1,7 @@
 import datetime
 
 from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey, Text
-from database import Base
+from database import Base, engine
 from app import db
 
 class Project(Base):
@@ -73,4 +73,20 @@ class Volunteer(Base):
         return False
 
     def list_tasks(self):
+        # 'list' all current tasks for volunteer
+        return self.tasks
+
+    def finish_task(self, task_id):
+        # mark task with 'id' as finished
+        self.tasks.remove(Task.query.get(task_id))
+
+    def accept_task(self, task_id):
+        # add task with 'id' to list of assigned tasks
+        t = Task.query.get(task_id)
+        self.tasks.add(Task.query.get(t))
+        return t
+
+    def reject_task(self, task_id):
+        # reject task with 'id'
         return
+
