@@ -23,10 +23,13 @@
                     <div class="project">
                         <h4 class = "project-title">{{ project.name }} </h4>
                         <div class="project-details">
-                            <div action = {{ url_for('detail_task', project=project.id)}}></div>
+                            <div class = "project-description">
+                                <b> Description: </b>{{project.description}}
+                            </div>
                             <ul>
                                 <div class = "row">
                                     <div class ="large-6 columns">
+                                        <h4> Project Tasks: </h4>
                                         {% for task in data[project][0] %}
                                         <li class ="project-task">
                                             <b>Task:</b> {{task.id}}
@@ -35,6 +38,7 @@
                                         {% endfor %}
                                     </div>
                                     <div class="large-6 columns">
+                                        <h4> Available Volunteers: </h4>
                                         {% for volunteer in data[project][1] %}
                                         <li class ="project-volunteer">
                                             <b>Volunteer:</b> {{volunteer.name}}
