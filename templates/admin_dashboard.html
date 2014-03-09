@@ -31,8 +31,8 @@
                                     <div class ="large-6 columns">
                                         <h4> Project Tasks: </h4>
                                         {% for tuple in data[project][0] %}
-                                        <div class ="task">
                                         {% if not tuple[0].completed %}
+                                        <div class ="task">
                                             <li class ="project-task">
                                                 <h4> Task </h4>
                                                 <b>Task:</b> {{tuple[0].id}}
