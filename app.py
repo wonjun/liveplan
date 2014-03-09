@@ -259,10 +259,12 @@ def list_volunteers_on_task(task_id):
 
 def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
+    print list_tasks(volunteer_id)
     db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
     db.session.commit()
     print list_tasks(volunteer_id)
     rows = db.engine.execute('SELECT * FROM assignment WHERE task_id=%s' % str(task_id))
+    print list_tasks(volunteer_id)
     if not rows.scalar():
         true_boolean = 1
         if IS_HEROKU:

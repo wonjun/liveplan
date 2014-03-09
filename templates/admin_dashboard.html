@@ -31,20 +31,22 @@
                                     <div class ="large-6 columns">
                                         <h4> Project Tasks: </h4>
                                         {% for tuple in data[project][0] %}
+                                        {% if not tuple[0].completed %}
                                         <div class ="task">
-                                        <li class ="project-task">
-                                            <h4> Task </h4>
-                                            <b>Task:</b> {{tuple[0].id}}
-                                            <b>Name:</b> {{tuple[0].task_name}}<br>
-                                            <b>Short Description:</b> {{tuple[0].short_description}}
-                                        </li>
-                                            <h4 class ="project-volunteer"> Volunteers </h4>
-                                            {% for vol in tuple[1] %}
-                                            <li class ="project-volunteer">
-                                            <b>Volunteer: </b> {{vol['name']}}; {{vol['phone']}}
-                                            {% endfor %}
+                                            <li class ="project-task">
+                                                <h4> Task </h4>
+                                                <b>Task:</b> {{tuple[0].id}}
+                                                <b>Name:</b> {{tuple[0].task_name}}<br>
+                                                <b>Short Description:</b> {{tuple[0].short_description}}
                                             </li>
-                                        </div>
+                                                <h4 class ="project-volunteer"> Volunteers </h4>
+                                                {% for vol in tuple[1] %}
+                                                <li class ="project-volunteer">
+                                                <b>Volunteer: </b> {{vol['name']}}; {{vol['phone']}}
+                                                {% endfor %}
+                                                </li>
+                                            </div>
+                                        {% endif %}
                                         {% endfor %}
                                     </div>
                                     <div class="large-6 columns">
