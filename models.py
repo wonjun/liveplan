@@ -1,5 +1,6 @@
 from flask import Flask
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Boolean
+from app import db
 
 class Project(db.Model):
     id = Column(Integer, primary_key=True)

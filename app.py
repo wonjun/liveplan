@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
+from models import *
 
 IS_HEROKU = 'IS_HEROKU' in os.environ
 
