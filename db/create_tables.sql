@@ -8,7 +8,7 @@ CREATE TABLE task (
 	id INTEGER NOT NULL,
 	task_name VARCHAR(160) NOT NULL,
 	project_id INTEGER NOT NULL,
-	start_time DATETIME NOT NULL,
+	start_time TIMESTAMP NOT NULL,
 	duration INTEGER NOT NULL,
 	short_description VARCHAR(160),
 	long_description TEXT,
