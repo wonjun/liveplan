@@ -63,13 +63,13 @@ def project_page(project=None):
     volunteers = Volunteer.query.all()
     return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers, project=project)
 
-@app.route('/admin_dashboard/<project>/detail_task')
-def detail_task(project=None):
-    return render_template('project_tasks.html', project=project)
+@app.route('/admin_dashboard/<project>/<detail_task>')
+def detail_task(project=None, task=None):
+    return render_template('project_tasks.html', project=project, task=task)
 
-@app.route('/admin_dashboard/<project>/detail_user')
-def detail_user(project=None):
-    return render_template('project_users.html', project=project)
+@app.route('/admin_dashboard/<project>/<detail_user>')
+def detail_user(project=None, volunteer=None):
+    return render_template('project_users.html', project=project, volunteer=volunteer)
 
 @app.route('/admin_dashboard/<project>/create_user')
 def create_user(project=None, methods=['GET', 'POST']):
@@ -80,7 +80,7 @@ def create_user(project=None, methods=['GET', 'POST']):
         elif not request.form['phone']:
             error = 'You do not have a phone'
         else:
-            t = Task(request.form['name'], request.form['phone'])
+            v = Volunteer(request.form['name'], request.form['phone'])
             db.session.commit()
             flash('You have successfully created a volunteer!')
             return redirect(url_for('admin_dashboard, project=project')) # + project.id))
@@ -109,7 +109,7 @@ def create_task(project = None, methods=['GET', 'POST']):
             db.session.commit()
             flash('You have successfully created a task!')
             return redirect(url_for('admin_dashboard, project=project')) # + project.id))
-    return render_template('create_task.html', error=error, project=project)
+    return render_template('create_task.html', error=error, pid=project)
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():

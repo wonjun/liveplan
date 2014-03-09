@@ -7,20 +7,20 @@
     <div class="large-4 large-centered columns">
       <h2 style="color: white;">Create Task</h2>
       {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-      <form action="{{ url_for('create_task', project=project) }}" method=post>
+      <form action="{{ url_for('create_task', project=pid) }}" method=post>
       <dl>
         <dt>Task Name:
-        <dd><input type=text name=task_name>
+        <dd><input type=text name='task_name'>
         <dt>Start Time:
-        <dd><input type=text name=start_time>
+        <dd><input type=text name='start_time'>
         <dt>Duration:
-        <dd><input type=text name=duration>
+        <dd><input type=text name='duration'>
         <dt>Short Description:
-        <dd><input type=text name=short_description>
+        <dd><input type=text name='short_description'>
         <dt>Long Description:
-        <dd><input type=text name=long_description>
+        <dd><input type=text name='long_description'>
         <dt>Max Volunteers:
-        <dd><input type=text name=max_volunteers>
+        <dd><input type=text name='max_volunteers'>
         <dd><input class="tiny secondary button" type=submit value='Create Project'>
       </dl>
       </form>
