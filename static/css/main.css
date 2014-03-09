@@ -3,7 +3,7 @@
   height: 768px;
   left: 0;
   top: 0;
-  position: absolute;
+  position: fixed;
 }
 #create-form {
   display: none;
