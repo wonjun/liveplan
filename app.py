@@ -176,7 +176,7 @@ def parse_received_texts(from_number, received_text):
             for (task_name, task_id, task_short) in open_tasks(volunteer.project_id):
                 response += task_name + "(" + task_id + "): " + task_short + "\n"
         else:
-            response = 'Invalid Command1'
+            response = parsed_received_text
     elif len(parsed_received_text) == 2:
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
