@@ -166,6 +166,7 @@ def parse_received_texts(from_number, received_text):
     resp = twilio.twiml.Response()
     response = None
     if len(parsed_received_text) == 1:
+        parsed_received_text[0] = parsed_received_text[0].lower()
         if parsed_received_text[0] == 'list':
             tasks = list_tasks(volunteer.id)
             if not tasks:
