@@ -6,6 +6,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from models import *
 from twilio_api import send_text
 import twilio.twiml
+from datetime import datetime
 
 from database import db_session
 import models
@@ -71,8 +72,8 @@ def detail_task(project=None, task=None):
 def detail_user(project=None, volunteer=None):
     return render_template('project_users.html', project=project, volunteer=volunteer)
 
-@app.route('/admin_dashboard/<project>/create_user')
-def create_user(project=None, methods=['GET', 'POST']):
+@app.route('/admin_dashboard/<project>/create_user', methods=['GET', 'POST'])
+def create_user(project=None):
     error = None
     print request.method
     if request.method == 'POST':
@@ -81,19 +82,19 @@ def create_user(project=None, methods=['GET', 'POST']):
         elif not request.form['phone']:
             error = 'You do not have a phone'
         else:
-            v = Volunteer(request.form['name'], request.form['phone'])
+            v = Volunteer(project, request.form['name'], request.form['phone'], [])
             db.session.add(v)
             db.session.commit()
             flash('You have successfully created a volunteer!')
-            return redirect(url_for('admin_dashboard, project=project')) # + project.id))
+            return redirect(url_for('admin_dashboard')) # + project.id))
     return render_template('create_user.html', error=error, pid=project)
 
-@app.route('/admin_dashboard/<project>/create_task')
-def create_task(project = None, methods=['GET', 'POST']):
+@app.route('/admin_dashboard/<project>/create_task', methods=['GET', 'POST'])
+def create_task(project = None):
     error = None
     print request.method
     if request.method == 'POST':
-        if not request.form['name']:
+        if not request.form['task_name']:
             error = 'You do not have a name'
         elif not request.form['start_time']:
             error = 'You do not have a start_time'
@@ -106,14 +107,16 @@ def create_task(project = None, methods=['GET', 'POST']):
         elif not request.form['max_volunteers']:
             error = 'You do not have a max_volunteers'
         else:
-            t = Task(request.form['name'], request.form['start_time'], request.form['duration'], request.form['short_description'], request.form['long_description'], request.form['max_volunteers'])
+            # handle datetime object
+            date_object = datetime.strptime(request.form['start_time'], '%b %d %Y %I:%M%p')
+            t = Task(request.form['task_name'], project, date_object, request.form['duration'], request.form['short_description'], request.form['long_description'], request.form['max_volunteers'], False)
             db.session.add(t)
             db.session.commit()
-            message = 'New task, ' + t.task_name + " (" + t.id + "), at " + t.start_time + "for " + t.max_volunteers
+            message = "New task, " + str(t.task_name) + " (" + str(t.id) + "), at " + str(t.start_time) + "for " + str(t.max_volunteers)
             for volunteer in list_project_volunteers(project):
                 twilio.send_text(volunteer.phone, twilio_api.FROM_NUMBER, message)
             flash('You have successfully created a task!')
-            return redirect(url_for('admin_dashboard, project=project')) # + project.id))
+            return redirect(url_for('admin_dashboard')) # + project.id))
     return render_template('create_task.html', error=error, pid=project)
 
 @app.route('/login', methods=['GET', 'POST'])
