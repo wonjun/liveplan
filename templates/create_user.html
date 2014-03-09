@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
+{% block content %}
+
 <div class="row">
   <div class="test">
     <div class="large-4 large-centered columns">
       <h2 style="color: white;">Create Task</h2>
       {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-      <form action="{{ url_for('create_volunteer', project=pid) }}" method=post>
+      {{ url_for('create_user', project=pid) }}
+      <form action="/admin_dashboard/{{pid}}/create_user" method=post>
       <dl>
         <dt>Name:
         <dd><input type=text name='name'>
@@ -17,3 +20,5 @@
     </div>
   </div>
 </div>
+
+{% endblock %}

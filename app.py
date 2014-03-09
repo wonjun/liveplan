@@ -74,6 +74,7 @@ def detail_user(project=None, volunteer=None):
 @app.route('/admin_dashboard/<project>/create_user')
 def create_user(project=None, methods=['GET', 'POST']):
     error = None
+    print request.method
     if request.method == 'POST':
         if not request.form['name']:
             error = 'You do not have a name'
@@ -81,6 +82,7 @@ def create_user(project=None, methods=['GET', 'POST']):
             error = 'You do not have a phone'
         else:
             v = Volunteer(request.form['name'], request.form['phone'])
+            db.session.add(v)
             db.session.commit()
             flash('You have successfully created a volunteer!')
             return redirect(url_for('admin_dashboard, project=project')) # + project.id))
@@ -89,7 +91,7 @@ def create_user(project=None, methods=['GET', 'POST']):
 @app.route('/admin_dashboard/<project>/create_task')
 def create_task(project = None, methods=['GET', 'POST']):
     error = None
-    print "GOT HERE"
+    print request.method
     if request.method == 'POST':
         if not request.form['name']:
             error = 'You do not have a name'
@@ -105,7 +107,7 @@ def create_task(project = None, methods=['GET', 'POST']):
             error = 'You do not have a max_volunteers'
         else:
             t = Task(request.form['name'], request.form['start_time'], request.form['duration'], request.form['short_description'], request.form['long_description'], request.form['max_volunteers'])
-            db.session.add(p)
+            db.session.add(t)
             db.session.commit()
             flash('You have successfully created a task!')
             return redirect(url_for('admin_dashboard, project=project')) # + project.id))

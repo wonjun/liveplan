@@ -7,6 +7,7 @@
     <div class="large-4 large-centered columns">
       <h2 style="color: white;">Create Task</h2>
       {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+      {{ url_for('create_task', project=pid) }}
       <form action="{{ url_for('create_task', project=pid) }}" method=post>
       <dl>
         <dt>Task Name:
