@@ -8,7 +8,7 @@ from twilio_api import send_text
 import twilio.twiml
 
 from database import db_session
-from models import *
+import models
 
 IS_HEROKU = 'IS_HEROKU' in os.environ
 
@@ -116,3 +116,28 @@ def parse_received_texts(from_number, received_text):
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
+
+
+def list_tasks(volunteer_id):
+    # 'list' all current tasks for volunteer
+    return models.Volunteer.query.get(volunteer_id).tasks
+
+def finish_task(volunteer_id, task_id):
+    # mark task with 'id' as finished
+    models.Volunteer.query.get(volunteer_id).tasks.remove(models.Task.query.get(task_id))
+    db.commit()
+
+def accept_task(volunteer_id, task_id):
+    # add task with 'id' to list of assigned tasks
+    t = models.Task.query.get(task_id)
+    models.Volunteer.query.get(volunteer_id).tasks.add(models.Task.query.get(t))
+    db.commit()
+    return t
+
+def reject_task(volunteer_id, task_id):
+    # reject task with 'id'
+    return None
+
+def more_task(task_id):
+    return models.Task.query.get(task_id)
+
