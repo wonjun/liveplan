@@ -11,3 +11,4 @@ itsdangerous
 six
 twilio
 wsgiref
+psycopg2
