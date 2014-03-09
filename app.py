@@ -176,7 +176,7 @@ def parse_received_texts(from_number, received_text):
         print "====== length 2 ======="
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
-        print "===== " + task_id + " ======="
+        print "===== " + int(task_id) + " ======="
         task = more_task(task_id)
         if task == None:
             response = 'Invalid Command2'
