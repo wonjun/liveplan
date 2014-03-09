@@ -220,7 +220,14 @@ def list_project_tasks(project_id):
 
 def list_volunteers_on_task(task_id):
     rows = db.engine.execute('select v.id, v.name, v.phone from volunteer v join assignment a on v.id=a.volunteer_id where a.task_id=%s' % (str(project_id)))
-    return rows
+    tups = rows.fetchall()
+    dicts = []
+    for tup in tups:
+        dicts.append({'id': tup[0],
+                      'name': tup[1],
+                      'phone': tup[2]
+                     })
+    return dicts
 
 def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
