@@ -4,7 +4,8 @@ from flask import Flask
 from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import *
-
+from twilio_api import send_text
+import twilio.twiml
 from database import db_session
 
 IS_HEROKU = 'IS_HEROKU' in os.environ
@@ -61,6 +62,54 @@ def project_tasks(project = None, action = None):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
+
+@app.route("/receive_text", methods=['GET', 'POST'])
+def receive_text():
+    from_number = request.values.get('From', None)
+    message = request.values.get('Message', None)
+    # call parse_received_texts(from_number, message)
+    return
+
+def parse_received_texts(from_number, received_text):
+    parsed_received_text = received_text.split()
+    if len(parsed_received_text) == 1:
+        if parsed_received_text[0] == 'list':
+            # list all current tasks
+            response = 'list of tasks'
+        elif parsed_received_text[0] == 'available':
+            # list all non-assigned tasks sorted by priority
+            response = 'list of available tasks'
+        else:
+            # invalid command
+            response = 'invalid command'
+    elif len(parsed_received_text) == 2:
+        command = parsed_received_text[0]
+        task_id = parsed_received_text[1]
+        # if task_id does not exist:
+            # fail
+        resp = twilio.twiml.Response()
+        if command == 'finish':
+            response = 'woohoo!'
+            # update server that task is done
+        elif command == 'accept':
+            # update server that user accepted task
+            response = 'confirmation message'
+        elif command == 'reject':
+            response = 'ok :/'
+            pass
+        elif command == 'more':
+            response = 'here is additional information'
+            # give additional info on task
+        else:
+            # invalid command
+            response = 'invalid command'
+    else:
+        # invalid command
+        response = 'invalid command'
+    resp.message(response)
+    return str(resp)
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
