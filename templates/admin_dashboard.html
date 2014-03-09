@@ -4,4 +4,9 @@
 <div class="overlay2"></div>
 hello this is a admin dashboard. Here are the projects:
 {{projects}}
+{% for project in projects %}
+    <li><a href="/admin_dashboard/<project>"> {{ project.name }} </a>
+</li>
+{% endfor %}
+
 {% endblock %}
