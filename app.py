@@ -155,14 +155,6 @@ def logout():
 
 app.secret_key = SECRET_KEY
 
-@app.route("/receive_text", methods=['GET', 'POST'])
-def receive_text():
-    from_number = str(request.values.get('From', None))
-    message = str(request.values.get('Body', None))
-    print "==============="
-    print message
-    return parse_received_texts(from_number, message)
-
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
     print "==============="
@@ -204,6 +196,12 @@ def parse_received_texts(from_number, received_text):
         response = 'Invalid Command4'
     resp.message(response)
     return str(resp)
+
+@app.route("/receive_text", methods=['GET', 'POST'])
+def receive_text():
+    from_number = str(request.values.get('From', None))
+    message = str(request.values.get('Body', None))
+    return parse_received_texts(from_number, message)
 
 
 @app.teardown_appcontext
