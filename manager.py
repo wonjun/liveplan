@@ -25,21 +25,39 @@ def seed():
     dt = datetime.datetime(2014, 3, 9)
     td = datetime.timedelta(minutes=TASK_STEP)
     # Create Projects
-    for i in range(4):
-        p = Project(name='Project #%s' % str(i), description='Great description of this project')
-        db.session.add(p)
-        # Create Tasks for this Project
-        for j in range(5):
-            t = Task(task_name='Task #%s' % str(j), project_id=p, start_time=(dt+td), duration=TASK_DURATION,
-                    short_description='Short description', long_description='This is a very long description',
-                    max_volunteers=5)
-            db.session.add(t)
-            dt = dt + td
-        # Create Volunteers for this Project
-        tasks = [Task.query.filter_by(project_id=p).first()]
-        print '======================='
-        print tasks
-        for j in range(5):
-            v = Volunteer(project_id=p, name='Superstar Volunteer #%s' % str(j), phone='123-456-7890', tasks=tasks)
-            db.session.add(v)
+    #for i in range(4):
+    p1 = Project(name='Project #%s' % str(1), description='Great description of this project')
+    db.session.add(p1)
+    p2 = Project(name='Project #%s' % str(2), description='Great description of this project')
+    db.session.add(p2)
+    p3 = Project(name='Project #%s' % str(3), description='Great description of this project')
+    db.session.add(p3)
     db.session.commit()
+    # Create Tasks for this Project
+    t1 = Task(task_name='Task #%s' % str(1), project_id=p1.id, start_time=(dt+td), duration=TASK_DURATION,
+            short_description='Short description', long_description='This is a very long description',
+            max_volunteers=5)
+    db.session.add(t1)
+    dt = dt + td
+    t2 = Task(task_name='Task #%s' % str(2), project_id=p1.id, start_time=(dt+td), duration=TASK_DURATION,
+            short_description='Short description', long_description='This is a very long description',
+            max_volunteers=5)
+    db.session.add(t2)
+    dt = dt + td
+    t3 = Task(task_name='Task #%s' % str(3), project_id=p1.id, start_time=(dt+td), duration=TASK_DURATION,
+            short_description='Short description', long_description='This is a very long description',
+            max_volunteers=5)
+    db.session.add(t3)
+    dt = dt + td
+    t = Task(task_name='Task #%s' % str(1), project_id=p2.id, start_time=(dt+td), duration=TASK_DURATION,
+            short_description='Short description', long_description='This is a very long description',
+            max_volunteers=5)
+    db.session.add(t)
+    dt = dt + td
+    db.session.commit()
+    # Create Volunteers for this Project
+    tasks = Task.query.filter_by(project_id=p1.id).all()
+    v = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='123-456-7890', tasks=[t1, t2, t3])
+    db.session.add(v)
+    db.session.commit()
+    db.session.remove()
