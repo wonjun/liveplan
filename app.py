@@ -167,7 +167,7 @@ def parse_received_texts(from_number, received_text):
             if not tasks:
                 response = 'You currently have no tasks assigned'
             for task in tasks:
-                response += task.id + ": " + task.task_name + " - " + task.start_time + "\n"
+                response += str(task.id) + ": " + task.task_name + " - " + str(task.start_time) + "\n"
         elif parsed_received_text[0] == 'available':
             tasks = open_tasks(volunteer.project_id)
             if not tasks:
