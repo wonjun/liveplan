@@ -2,13 +2,12 @@
 
 {% block content %}
 
-hello this is a admin dashboard. Here are the projects:
-<!-- {{projects}} -->
+<div class="overlay2"></div>
+Admin Dashboard
 
 {% for project in projects %}
     <li><a href="/admin_dashboard/{{project.id}}" > {{ project.name }} </a>
 </li>
 {% endfor %}
-
 
 {% endblock %}

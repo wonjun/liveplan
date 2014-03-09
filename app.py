@@ -28,7 +28,10 @@ app.config['PASSWORD'] = 'default'
 
 @app.route('/')
 def home(admin=None):
-  return render_template('index.html')
+    if 'logged_in' in session:
+        return redirect(url_for('admin_dashboard'))
+    else:
+        return render_template('index.html')
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
@@ -123,7 +126,7 @@ def login():
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('admin_dashboard'))
-    return render_template('login.html', error=error)
+    return render_template('index.html', error=error)
 
 @app.route('/logout')
 def logout():

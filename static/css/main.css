@@ -8,11 +8,17 @@
 }
 
 .overlay {
-  opacity: .55;
-  background-color: black;
+  opacity: .7;
+  background-color: gray;
   position: absolute;
   left: 0; top: 0; height: 1000px; width: 100%;
   z-index: 1;
+}
+.overlay2 {
+  background-color: #CCCCCC;
+  position: absolute;
+  left: 0; top: 0; height: 1000px; width: 100%;
+  z-index: -1;
 }
 
 .bg img {
@@ -28,7 +34,6 @@
   text-align: center;
   padding-bottom: 45px;
   height: 1px;
-  border-top: 1px solid black;
   text-align: center;
   position: relative;
   z-index: 10;
