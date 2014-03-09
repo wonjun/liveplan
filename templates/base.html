@@ -17,6 +17,10 @@
   <script src="static/js/foundation.min.js"></script>
   <script>
     $(document).foundation();
+    $("#project-create").click(function () {
+        $("#create-form").stop().slideToggle();
+        return false;
+    });
   </script>
 </body>
 

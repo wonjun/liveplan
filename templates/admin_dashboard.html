@@ -10,12 +10,14 @@
     <div class="large-12 columns">
         <div class = "panel panel-title">
             <div class = "dashboard-title">
-                <div style="opacity: 1;">
                 <h1> Admin Dashboard </h1>
-                </div>
             </div>
         </div>
         <div class = "panel">
+            <div id="project-create" class="button secondary"> Create a project!</div>
+            <div id="create-form">
+            {% include "create_project.html" %}
+            </div>
             {% for project in projects %}
                 <li>
                     <div class="project">
@@ -26,7 +28,4 @@
         </div>
     </div>
 </div>
-
-<a href="/admin_dashboard/create_project" > Create a project! </a>
-
 {% endblock %}
