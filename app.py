@@ -165,11 +165,15 @@ def parse_received_texts(from_number, received_text):
     if len(parsed_received_text) == 1:
         if parsed_received_text[0] == 'list':
             tasks = list_tasks(volunteer.id)
+            if not tasks:
+                response = 'You currently have no tasks assigned'
             for task in tasks:
                 response += task.id + ": " + task.task_name + " - " + task.start_time + "\n"
-            print 'yoyoyo'
         elif parsed_received_text[0] == 'available':
-            for (task_name, task_id, task_short) in open_tasks(volunteer.project_id):
+            tasks = open_tasks(volunteer.project_id)
+            if not tasks:
+                response = 'You currently have no available tasks'
+            for (task_name, task_id, task_short) in tasks:
                 response += task_name + "(" + task_id + "): " + task_short + "\n"
         else:
             response = parsed_received_text[0]
