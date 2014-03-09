@@ -219,7 +219,7 @@ def list_project_tasks(project_id):
     return db.session.query(models.Task).filter(models.Task.project_id==project_id).all()
 
 def list_volunteers_on_task(task_id):
-    rows = db.engine.execute('select v.id, v.name, v.phone from volunteer v join assignment a on v.id=a.volunteer_id where a.task_id=%s' % (str(project_id)))
+    rows = db.engine.execute('select v.id, v.name, v.phone from volunteer v join assignment a on v.id=a.volunteer_id where a.task_id=%s' % (str(task_id)))
     tups = rows.fetchall()
     dicts = []
     for tup in tups:
