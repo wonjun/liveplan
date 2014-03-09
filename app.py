@@ -167,7 +167,7 @@ def parse_received_texts(from_number, received_text):
     response = None
     if len(parsed_received_text) == 1:
         parsed_received_text[0] = parsed_received_text[0].lower()
-        if parsed_received_text[0] == 'help':
+        if parsed_received_text[0] == 'helpme':
             response += 'Available Commands:\n'
             response += 'list OR available\n'
             response += 'finish OR accept OR reject OR more + <id>'
@@ -188,9 +188,12 @@ def parse_received_texts(from_number, received_text):
     elif len(parsed_received_text) == 2:
         if not RepresentsInt(parsed_received_text[1]):
             response = 'Invalid Command'
-        command = parsed_received_text[0]
-        task_id = int(parsed_received_text[1])
-        task = more_task(task_id)
+            task = "fail"
+            command = "fail"
+        else:
+            command = parsed_received_text[0]
+            task_id = int(parsed_received_text[1])
+            task = more_task(task_id)
         if task == None:
             response = 'Invalid Command'
         elif command == 'finish':
@@ -256,6 +259,7 @@ def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
     db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
     db.session.commit()
+    print list_tasks(volunteer_id)
     rows = db.engine.execute('SELECT * FROM assignment WHERE task_id=%s' % str(task_id))
     if not rows.scalar():
         true_boolean = 1
@@ -263,6 +267,7 @@ def finish_task(volunteer_id, task_id):
             true_boolean = True
         db.engine.execute('UPDATE task SET completed=%s WHERE id=%s' % (str(true_boolean), str(task_id)))
         db.session.commit()
+    print list_tasks(volunteer_id)
 
 def accept_task(volunteer_id, task_id):
     # add task with 'id' to list of assigned tasks
