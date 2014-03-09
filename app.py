@@ -195,6 +195,7 @@ def parse_received_texts(from_number, received_text):
     else:
         response = 'Invalid Command4'
     resp.message(response)
+    print str(resp)
     return str(resp)
 
 @app.route("/receive_text", methods=['GET', 'POST'])
