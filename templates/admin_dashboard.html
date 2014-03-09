@@ -44,11 +44,37 @@
                                         {% endfor %}
                                     </div>
                                 </div>
-                                <div class="row">
-                                  <div class="test">
-                                    <div class="large-4 columns">
-                                      <div class = "button create_user secondary"><h6 style="color: black;">Create Volunteer</h6></div>
-                                      <div class = "create_user_form">
+                                <div class = "row">
+                                    <div class="large-6 columns">
+                                      <div class = "button create_task secondary">
+                                        <h6 style="color: black;">Create Task</h6>
+                                      </div>
+                                      <div class = "create_task_form"
+                                      {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+                                      <form action="{{ url_for('create_task', project=pid) }}" method=post>
+                                      <dl>
+                                        <dt>Task Name:
+                                        <dd><input type=text name='task_name'>
+                                        <dt>Start Time:
+                                        <dd><input type=text name='start_time'>
+                                        <dt>Duration:
+                                        <dd><input type=text name='duration'>
+                                        <dt>Short Description:
+                                        <dd><input type=text name='short_description'>
+                                        <dt>Long Description:
+                                        <dd><input type=text name='long_description'>
+                                        <dt>Max Volunteers:
+                                        <dd><input type=text name='max_volunteers'>
+                                        <dd><input class="tiny secondary button" type=submit value='Create Task'>
+                                      </dl>
+                                      </form>
+                                      </div>
+                                    </div>
+                                    <div class="large-6 columns">
+                                      <div class = "button create_user secondary">
+                                        <h6 style="color: black;">Create Volunteer</h6>
+                                      </div>
+                                        <div class = "create_user_form">
                                           {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
                                           <form action="{{ url_for('create_user', project=project.id) }}" method=post>
                                           <dl>
@@ -59,11 +85,10 @@
                                             <dd><input class="tiny secondary button" type=submit value='Create Volunteer'>
                                           </dl>
                                           </form>
-                                      </div>
+                                        </div>
                                     </div>
-                                  </div>
                                 </div>
-                                <li><a href="/admin_dashboard/{{project.id}}/create_task" > Assign Volunteer </a></li>
+                                <li><a href="/admin_dashboard/{{project.id}}/create_task" > Create Task </a></li>
                             </ul>
                         </div>
                     </div>
