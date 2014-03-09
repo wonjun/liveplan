@@ -42,7 +42,7 @@ class Task(Base):
         self.duration = duration
         self.short_description = short_description
         self.long_description = long_description
-        self.max_volunteer = max_volunteers
+        self.max_volunteers = max_volunteers
 
     def __repr__(self):
         return self.task_name + "'s description: " + self.short_description
@@ -58,7 +58,7 @@ class Volunteer(Base):
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
     name = Column(String(40), nullable=False)
     phone = Column(String(15), nullable=False)
-    tasks = db.relationship('Task', secondary=tasks, backref='volunteers', lazy='dynamic')
+    tasks = db.relationship('Task', secondary=tasks, backref='volunteers')
 
     def __init__(self, project_id, name, phone, tasks):
         self.project_id = project_id
