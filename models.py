@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 
 class Project(db.Model):
     id = Column(Integer, primary_key=True)
@@ -10,7 +10,7 @@ class Project(db.Model):
         self.description = description
 
     def __repr__(self):
-        return "Project name: " + name 
+        return "Project name: " + self.name 
 
 class Task(db.Model):
     id = Column(Integer, primary_key=True)
@@ -22,14 +22,14 @@ class Task(db.Model):
     long_description = Column(Text)
     max_volunteers = Column(Integer)
 
-    def __init__(self, username, email):
+    def __init__(self, task_name, project_id, start_time, duration, short_description, long_description, max_volunteers):
         self.task_name = task_name
         self.project_id = project_id
         self.start_time = start_time
         self.duration = duration
         self.short_description = short_description
         self.long_description = long_description
-        self.max_volunteer = max_volunteer
+        self.max_volunteer = max_volunteers
 
     def __repr__(self):
-        return task_name + "'s description: " + short_description
+        return self.task_name + "'s description: " + self.short_description
