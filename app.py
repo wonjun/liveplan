@@ -35,6 +35,12 @@ def home(admin=None):
         return render_template('index.html')
 
 def list_project_volunteers(project_id):
+    all_volunteers = db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
+    avail_volunteers = []
+    for vol in all_volunteers:
+        print vol
+        if len(list_tasks(vol.id)) == 0:
+            avail_volunteers.append(vol)
     return db.session.query(models.Volunteer).filter(models.Volunteer.project_id==project_id).all()
 
 def list_project_tasks(project_id):
