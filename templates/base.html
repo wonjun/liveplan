@@ -6,6 +6,7 @@
     <title>LivePlan</title>
     <link rel="stylesheet" href="/static/css/foundation.css" />
     <link rel="stylesheet" href="/static/css/main.css" />
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="/static/js/modernizr.js"></script>
   </head>
 <body lang="en">
@@ -36,6 +37,8 @@
         return false;
     });
   </script>
+  {% block javascript %}
+  {% endblock %}
 </body>
 
 </html>
