@@ -167,7 +167,11 @@ def parse_received_texts(from_number, received_text):
     response = None
     if len(parsed_received_text) == 1:
         parsed_received_text[0] = parsed_received_text[0].lower()
-        if parsed_received_text[0] == 'list':
+        if parsed_received_text[0] == 'help':
+            response += 'Available Commands:\n'
+            response += 'list OR available\n'
+            response += 'finish OR accept OR reject OR more + <id>'
+        elif parsed_received_text[0] == 'list':
             tasks = list_tasks(volunteer.id)
             if not tasks:
                 response = 'You currently have no tasks assigned'
