@@ -2,31 +2,42 @@
 
 {% block content %}
 
+<div class="bg">
+  <div class="overlay2"></div>
+  <img src="/static/img/splash.jpg"/>
+</div>
 <div class="row">
-  <div class="test">
-    <div class="large-4 large-centered columns">
-      <h2 style="color: white;">Create Task</h2>
-      {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-      {{ url_for('create_task', project=pid) }}
-      <form action="{{ url_for('create_task', project=pid) }}" method=post>
-      <dl>
-        <dt>Task Name:
-        <dd><input type=text name='task_name'>
-        <dt>Start Time:
-        <dd><input type=text name='start_time'>
-        <dt>Duration:
-        <dd><input type=text name='duration'>
-        <dt>Short Description:
-        <dd><input type=text name='short_description'>
-        <dt>Long Description:
-        <dd><input type=text name='long_description'>
-        <dt>Max Volunteers:
-        <dd><input type=text name='max_volunteers'>
-        <dd><input class="tiny secondary button" type=submit value='Create Project'>
-      </dl>
-      </form>
+    <div class="large-12 columns">
+        <div class = "panel panel-title">
+            <div class = "dashboard-title">
+                <h1> Admin Dashboard </h1>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="large-4 large-centered columns">
+              <h2 style="color: black;">Create Task</h2>
+              {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+              <form action="{{ url_for('create_task', project=pid) }}" method=post>
+              <dl>
+                <dt>Task Name:
+                <dd><input type=text name='task_name'>
+                <dt>Start Time:
+                <dd><input type=text name='start_time'>
+                <dt>Duration:
+                <dd><input type=text name='duration'>
+                <dt>Short Description:
+                <dd><input type=text name='short_description'>
+                <dt>Long Description:
+                <dd><input type=text name='long_description'>
+                <dt>Max Volunteers:
+                <dd><input type=text name='max_volunteers'>
+                <dd><input class="tiny secondary button" type=submit value='Create Task'>
+              </dl>
+              </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 {% endblock %}

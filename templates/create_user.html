@@ -1,20 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="bg">
+  <div class="overlay2"></div>
+  <img src="/static/img/splash.jpg"/>
+</div>
 
 <div class="row">
-  <div class="test">
+<div class="large-12 columns">
+    <div class = "panel panel-title">
+        <div class = "dashboard-title">
+            <h1> Admin Dashboard </h1>
+        </div>
+    </div>
     <div class="large-4 large-centered columns">
-      <h2 style="color: white;">Create Task</h2>
+      <h2 style="color: black;">Create User</h2>
       {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-      {{ url_for('create_user', project=pid) }}
       <form action="{{ url_for('create_user', project=pid) }}" method=post>
       <dl>
         <dt>Name:
         <dd><input type=text name='name'>
         <dt>Phone:
         <dd><input type=text name='phone'>
-        <dd><input class="tiny secondary button" type=submit value='Create Volunteer'>
+        <dd><input class="tiny secondary button" type=submit value='Add Volunteer'>
       </dl>
       </form>
     </div>
