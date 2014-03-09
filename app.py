@@ -15,16 +15,33 @@ else:
 db = SQLAlchemy(app)
 
 @app.route('/')
+def home():
+  return render_template('index.html')
+
+@app.route('/admin_dashboard')
 def admin_dashboard():
     projects = Project.query.all()    
-    return render_template('index.html', projects=projects)
+    return render_template('admin_dashboard.html', projects=projects)
 
+@app.route('/admin_dashboard/create_project')
+def create_project():
+    return render_template('create_project.html')
 
-@app.route('/robots.txt')
-def robots():
-    res = app.make_response('User-agent: *\nAllow: /')
-    res.mimetype = 'text/plain'
-    return res
+@app.route('/admin_dashboard/project/tasks')
+def project_tasks():
+    return render_template('project_tasks.html')
+
+@app.route('/admin_dashboard/project/users')
+def project_users():
+    return render_template('project_users.html')
+
+@app.route('/admin_dashboard/project/create_user')
+def create_user():
+    return render_template('create_user.html')
+
+@app.route('/admin_dashboard/project/create_task')
+def detail_project_view():
+    return render_template('create_task.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
