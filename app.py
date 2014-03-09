@@ -213,7 +213,6 @@ def receive_text():
     message = str(request.values.get('Body', None))
     return parse_received_texts(from_number, message)
 
-
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
