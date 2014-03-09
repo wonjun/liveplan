@@ -1,11 +1,11 @@
-from flask import Flask
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from app import db
+
 
 class Project(db.Model):
     id = Column(Integer, primary_key=True)
-    name = Column(String(80), unique=True)
-    description = Column(Text, unique=True)
+    name = Column(String(80), nullable=False)
+    description = Column(Text)
 
     def __init__(self, name, description):
         self.name = name
@@ -14,15 +14,22 @@ class Project(db.Model):
     def __repr__(self):
         return "Project name: " + self.name
 
+
+tasks = db.Table('assignment',
+    db.Column('task_id', db.Integer, db.ForeignKey('task.id')),
+    db.Column('volunteer_id', db.Integer, db.ForeignKey('volunteer.id'))
+)
+
+
 class Task(db.Model):
     id = Column(Integer, primary_key=True)
-    task_name = Column(String(160))
-    project_id = Column(Integer, ForeignKey('project.id'))
-    start_time = Column(DateTime)
-    duration = Column(Integer)
+    task_name = Column(String(160), nullable=False)
+    project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
+    start_time = Column(DateTime, nullable=False)
+    duration = Column(Integer, nullable=False)
     short_description = Column(String(160))
     long_description = Column(Text)
-    max_volunteers = Column(Integer)
+    max_volunteers = Column(Integer, nullable=False)
 
     def __init__(self, task_name, project_id, start_time, duration, short_description, long_description, max_volunteers):
         self.task_name = task_name
@@ -36,16 +43,21 @@ class Task(db.Model):
     def __repr__(self):
         return self.task_name + "'s description: " + self.short_description
 
+
 class Volunteer(db.Model):
     id = Column(Integer, primary_key=True)
-    name = Column(String(40), unique=True)
-    phone = Column(String(15), unique=True)
-    status = Column(Boolean, unique=True)
+    project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
+    name = Column(String(40), nullable=False)
+    phone = Column(String(15), nullable=False)
+    tasks = db.relationship('Task', secondary=tasks,
+        backref=db.backref('volunteers', lazy='dynamic'))
 
     def __init__(self, name, phone):
         self.name = name
         self.phone = phone
-        self.status = True
 
     def __repr__(self):
         return "Volunteer name: " + self.name + "Phone Number: " + self.phone
+
+    def is_busy(self):
+        return False
