@@ -176,13 +176,13 @@ def parse_received_texts(from_number, received_text):
             for (task_name, task_id, task_short) in open_tasks(volunteer.project_id):
                 response += task_name + "(" + task_id + "): " + task_short + "\n"
         else:
-            response = 'Invalid Command'
+            response = 'Invalid Command1'
     elif len(parsed_received_text) == 2:
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
         task = more_task(task_id)
         if task == None:
-            response = 'Invalid Command'
+            response = 'Invalid Command2'
         elif command == 'finish':
             finish_task(volunteer.id, task_id)
             response = 'Task successfully completed.'
@@ -196,9 +196,9 @@ def parse_received_texts(from_number, received_text):
             response = task.task_name + ": " + task.short_description + "\n"
             response += task.long_description
         else:
-            response = 'Invalid Command'
+            response = 'Invalid Command3'
     else:
-        response = 'Invalid Command'
+        response = 'Invalid Command4'
     resp.message(response)
     return str(resp)
 
