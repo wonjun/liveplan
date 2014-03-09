@@ -1,14 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Login</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="{{ url_for('login') }}" method=post>
-  <dl>
-    <dt>Username:
-    <dd><input type=text name=username>
-    <dt>Password:
-    <dd><input type=password name=password>
-    <dd><input type=submit value=Login>
-  </dl>
-  </form>
+<div class="bg">
+  <div class="overlay"></div>
+  <img src="static/img/splash.jpg"/>
+</div>
+<div class="row">
+  <div class="login">
+    <div class="large-4 large-centered columns">
+      <h2 style="color: white;">Login</h2>
+      {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+      <form action="{{ url_for('login') }}" method=post>
+      <dl>
+        <dt>Username:
+        <dd><input type=text name=username>
+        <dt>Password:
+        <dd><input type=password name=password>
+        <dd><input class="tiny secondary button" type=submit value=Login>
+      </dl>
+      </form>
+    </div>
+  </div>
 {% endblock %}
