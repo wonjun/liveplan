@@ -63,16 +63,18 @@ def project_page(project=None):
     volunteers = Volunteer.query.all()
     return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers, project=project)
 
-@app.route('/admin_dashboard/<project>/<detail_task>')
+@app.route('/admin_dashboard/<project>/detail_task')
 def detail_task(project=None, task=None):
-    return render_template('project_tasks.html', project=project, task=task)
+    tasks = list_project_tasks(project)
+    return render_template('project_tasks.html',tasks=tasks)
 
-@app.route('/admin_dashboard/<project>/<detail_user>')
+@app.route('/admin_dashboard/<project>/detail_user')
 def detail_user(project=None, volunteer=None):
-    return render_template('project_users.html', project=project, volunteer=volunteer)
+    volunteers = list_project_volunteers(project)
+    return render_template('project_users.html', volunteers=volunteers)
 
-@app.route('/admin_dashboard/<project>/create_user')
-def create_user(project=None, methods=['GET', 'POST']):
+@app.route('/admin_dashboard/<project>/create_user', methods=['GET', 'POST'])
+def create_user(project=None):
     error = None
     print request.method
     if request.method == 'POST':
