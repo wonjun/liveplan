@@ -1,7 +1,7 @@
 import os
 
-from flask import Flask
-from flask import render_template
+from flask import Flask, request, session, g, redirect, url_for, \
+    abort, render_template, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import *
 from twilio_api import send_text
@@ -18,6 +18,13 @@ if IS_HEROKU:
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s/db/test.db' % os.path.dirname(os.path.realpath(__file__))
 db = SQLAlchemy(app)
+
+DATABASE = 'sqlite:///%s/db/test.db'
+DEBUG = True
+SECRET_KEY = '\xf2v$@\xab\xbc\xfaw\x96\xbd\xa7~\x8f\xcc\xbaB\xe6\x82=9\x10&\x9b\xbe'
+app.config['USERNAME'] = 'admin'
+app.config['PASSWORD'] = 'default'
+
 
 @app.route('/')
 def home(admin=None):
@@ -61,10 +68,30 @@ def project_tasks(project = None, action = None):
     else:
         abort(404)
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  error = None
+  if 'logged_in' in session:
+    flash('You are already logged in')
+    return redirect(url_for('admin_dashboard'))
+  if request.method == 'POST':
+    if request.form['username'] != app.config['USERNAME']:
+        error = 'Invalid Username'
+    elif request.form['password'] != app.config['PASSWORD']:
+        error = 'Invalid password'
+    else:
+        session['logged_in'] = True
+        flash('You were logged in')
+        return redirect(url_for('admin_dashboard'))
+  return render_template('login.html', error=error)
 
+@app.route('/logout')
+def logout():
+  session.pop('logged_in', None)
+  flash('You were logged out')
+  return redirect(url_for('home'))
+
+app.secret_key = SECRET_KEY
 
 @app.route("/receive_text", methods=['GET', 'POST'])
 def receive_text():
@@ -112,7 +139,10 @@ def parse_received_texts(from_number, received_text):
     resp.message(response)
     return str(resp)
 
-
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
