@@ -158,7 +158,7 @@ app.secret_key = SECRET_KEY
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
     print "==============="
-    print parse_received_text[0]
+    print parsed_received_text[0]
     volunteer = get_user_by_phone(from_number)
     resp = twilio.twiml.Response()
     response = None
