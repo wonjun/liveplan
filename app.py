@@ -167,6 +167,7 @@ def parse_received_texts(from_number, received_text):
             tasks = list_tasks(volunteer.id)
             for task in tasks:
                 response += task.id + ": " + task.task_name + " - " + task.start_time + "\n"
+            print 'yoyoyo'
         elif parsed_received_text[0] == 'available':
             for (task_name, task_id, task_short) in open_tasks(volunteer.project_id):
                 response += task_name + "(" + task_id + "): " + task_short + "\n"
@@ -194,6 +195,7 @@ def parse_received_texts(from_number, received_text):
             response = 'Invalid Command3'
     else:
         response = 'Invalid Command4'
+    print str(response)
     resp.message(response)
     print str(resp)
     return str(resp)
