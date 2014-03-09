@@ -207,7 +207,10 @@ def finish_task(volunteer_id, task_id):
     db.session.commit()
     rows = db.engine.execute('SELECT * FROM assignment WHERE task_id=%s' % str(task_id))
     if not rows.scalar():
-        db.engine.execute('UPDATE task SET completed=1 WHERE id=%s' % str(task_id))
+        true_boolean = 1
+        if IS_HEROKU:
+            true_boolean = True
+        db.engine.execute('UPDATE task SET completed=%s WHERE id=%s' % (str(true_boolean), str(task_id)))
         db.session.commit()
 
 def accept_task(volunteer_id, task_id):
