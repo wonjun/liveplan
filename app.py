@@ -157,7 +157,7 @@ app.secret_key = SECRET_KEY
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
     volunteer = get_user_by_phone(from_number)
-    if volunteer = None:
+    if volunteer == None:
         response = 'Unrecognized Volunteer Number'
     resp = twilio.twiml.Response()
     response = None
