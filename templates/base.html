@@ -19,7 +19,9 @@
     $(document).foundation();
     $("#project-create").click(function () {
         $("#create-form").stop().slideToggle();
-        return false;
+    });
+    $(".project").click(function(){
+        $(this).find(".project-details").stop().slideToggle();
     });
   </script>
 </body>

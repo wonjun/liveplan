@@ -13,7 +13,9 @@
   margin-top: 60px;
   border: none;
 }
-
+.project-details{
+  display: none;
+}
 .panel-title{
   width: 75%;
   margin: auto;
@@ -36,6 +38,7 @@
 
 li {
   list-style-type: none;
+  cursor: pointer
 }
 .project {
   list-style-type: none;

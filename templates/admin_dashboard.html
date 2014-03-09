@@ -21,7 +21,15 @@
             {% for project in projects %}
                 <li>
                     <div class="project">
-                        <a href="/admin_dashboard/<project>"> <h4>{{ project.name }} </h4></a>
+                        <h4>{{ project.name }} </h4>
+                        <div class="project-details">
+                            <ul>
+                            <li><a href="/admin_dashboard/{{project.id}}/detail_task" > Tasks </a></li>
+                            <li><a href="/admin_dashboard/{{project.id}}/detail_user" > Volunteer </a></li>
+                            <li><a href="/admin_dashboard/{{project.id}}/create_task" > Create Task </a></li>
+                            <li><a href="/admin_dashboard/{{project.id}}/create_user" > Assign Volunteer </a></li>
+                            </ul>
+                        </div>
                     </div>
                 </li>
             {% endfor %}
