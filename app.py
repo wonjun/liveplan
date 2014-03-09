@@ -70,26 +70,26 @@ def project_tasks(project = None, action = None):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-  error = None
-  if 'logged_in' in session:
-    flash('You are already logged in')
-    return redirect(url_for('admin_dashboard'))
-  if request.method == 'POST':
-    if request.form['username'] != app.config['USERNAME']:
-        error = 'Invalid Username'
-    elif request.form['password'] != app.config['PASSWORD']:
-        error = 'Invalid password'
-    else:
-        session['logged_in'] = True
-        flash('You were logged in')
+    error = None
+    if 'logged_in' in session:
+        flash('You are already logged in')
         return redirect(url_for('admin_dashboard'))
-  return render_template('login.html', error=error)
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid Username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('admin_dashboard'))
+    return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
-  session.pop('logged_in', None)
-  flash('You were logged out')
-  return redirect(url_for('home'))
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('home'))
 
 app.secret_key = SECRET_KEY
 
