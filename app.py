@@ -81,7 +81,6 @@ def detail_user(project=None, volunteer=None):
 @app.route('/admin_dashboard/<project>/create_user', methods=['GET', 'POST'])
 def create_user(project=None):
     error = None
-    print request.method
     if request.method == 'POST':
         if not request.form['name']:
             error = 'You do not have a name'
@@ -98,7 +97,6 @@ def create_user(project=None):
 @app.route('/admin_dashboard/<project>/create_task', methods=['GET', 'POST'])
 def create_task(project = None):
     error = None
-    print request.method
     if request.method == 'POST':
         if not request.form['task_name']:
             error = 'You do not have a name'
@@ -152,8 +150,6 @@ app.secret_key = SECRET_KEY
 
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
-    print "==============="
-    print parsed_received_text[0]
     volunteer = get_user_by_phone(from_number)
     resp = twilio.twiml.Response()
     response = None
@@ -171,38 +167,34 @@ def parse_received_texts(from_number, received_text):
             for (task_name, task_id, task_short) in tasks:
                 response += task_name + "(" + task_id + "): " + task_short + "\n"
         else:
-            response = parsed_received_text[0]
+            response = 'Invalid Command'
     elif len(parsed_received_text) == 2:
-        print "====== length 2 ======="
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
-        print "===== " + str(task_id) + " ======="
         task = more_task(task_id)
         if task == None:
-            response = 'Invalid Command2'
+            response = 'Invalid Command'
         elif command == 'finish':
-            print "====== finish ======="
-            finish_task(volunteer.id, task_id)
+            r = finish_task(volunteer.id, task_id)
+            if r == None:
+                response = 'Finish task unsuccessful.'
             response = 'Task successfully completed.'
         elif command == 'accept':
-            print "====== accept ======="
-            accept_task(volunteer.id, task_id)
+            r = accept_task(volunteer.id, task_id)
+            if r == None:
+                response = 'Accept task unsuccessful.'
             response = 'Task successfully accepted.'
         elif command == 'reject':
-            print "====== reject ======="
             response = 'Rejected task.'
             pass
         elif command == 'more':
-            print "====== more ======="
             response = task.task_name + ": " + task.short_description + "\n"
             response += task.long_description
         else:
-            response = 'Invalid Command3'
+            response = 'Invalid Command'
     else:
-        response = 'Invalid Command4'
-    print str(response)
+        response = 'Invalid Command'
     resp.message(response)
-    print str(resp)
     return str(resp)
 
 @app.route("/receive_text", methods=['GET', 'POST'])
