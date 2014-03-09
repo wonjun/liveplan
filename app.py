@@ -47,7 +47,11 @@ def admin_dashboard():
     projects = db.session.query(models.Project).all()
     data = {}
     for project in projects:
-        data[project] = [list_project_tasks(project.id), list_project_volunteers(project.id)]
+        project_tasks = list_project_tasks(project.id)
+        task_tuple = []
+        for task in project_tasks:
+            task_tuple.append([task, list_volunteers_on_task(task.id)])
+        data[project] = [task_tuple, list_project_volunteers(project.id)]
     return render_template('admin_dashboard.html', data=data)
 
 @app.route('/admin_dashboard/create_project', methods=['GET', 'POST'])
