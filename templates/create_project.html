@@ -5,6 +5,22 @@
 <!-- Form with sumission stuff -->
 <!-- links back to admin_dashboard on successful submission -->
 
-{{error}}
+<div class="row">
+  <div class="/admin_dashboard/create_project">
+    <div class="large-4 large-centered columns">
+      <h2 style="color: white;">admin_dashboard</h2>
+      {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+      <form action="{{ url_for('create_project') }}" method=post>
+      <dl>
+        <dt>Project Name:
+        <dd><input type=text name=name>
+        <dt>Project Description:
+        <dd><input type=textarea name=description>
+        <dd><input class="tiny secondary button" type=submit value='admin_dashboard'>
+      </dl>
+      </form>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

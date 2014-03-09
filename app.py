@@ -36,7 +36,7 @@ def admin_dashboard():
     projects = Project.query.all()
     return render_template('admin_dashboard.html', projects=projects)
 
-@app.route('/admin_dashboard/create_project')
+@app.route('/admin_dashboard/create_project', methods=['GET', 'POST'])
 def create_project():
     # look at models functions later to change
     error = None
@@ -47,27 +47,67 @@ def create_project():
             error = 'You do not have a description'
         else:
             # db magic insert and save as project
+            p = Project(request.form['name'], request.form['description'])
+            db.session.add(p)
+            db.session.commit()
             flash('You have successfully created a project!')
-            return redirect(url_for('/admin_dashboard/')) # + project.id))
+            return redirect(url_for('admin_dashboard')) # + project.id))
     return render_template('create_project.html', error=error)
 
-@app.route('/admin_dashboard/<project>/<action>')
-def project_tasks(project = None, action = None):
-    if action == 'detail_task':
-        return render_template('project_tasks.html', project=project)
-    elif action == 'detail_user':
-        return render_template('project_users.html', project=project)
-    elif action == 'create_user':
-        return render_template('create_user.html', project=project)
-    elif action == 'create_tasks':
-        return render_template('create_task.html', project=project)
-    elif action == None:
-        tasks = Task.query.all()
-        volunteers = Volunteer.query.all()
-        return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers)
-    else:
-        abort(404)
+@app.route('/admin_dashboard/<project>')
+def project_page(project=None):
+    tasks = Task.query.all()
+    volunteers = Volunteer.query.all()
+    return render_template('detail_project_view.html', tasks=tasks, volunteers=volunteers, project=project)
 
+@app.route('/admin_dashboard/<project>/detail_task')
+def detail_task(project=None):
+    return render_template('project_tasks.html', project=project)
+
+@app.route('/admin_dashboard/<project>/detail_user')
+def detail_user(project=None):
+    return render_template('project_users.html', project=project)
+
+@app.route('/admin_dashboard/<project>/create_user')
+def create_user(project=None, methods=['GET', 'POST']):
+    error = None
+    if request.method == 'POST':
+        if not request.form['name']:
+            error = 'You do not have a name'
+        elif not request.form['phone']:
+            error = 'You do not have a phone'
+        else:
+            t = Task(request.form['name'], request.form['phone'])
+            db.session.commit()
+            flash('You have successfully created a volunteer!')
+            return redirect(url_for('admin_dashboard, project=project')) # + project.id))
+    return render_template('create_user.html', error=error, pid=project)
+
+@app.route('/admin_dashboard/<project>/create_task')
+def create_task(project = None, methods=['GET', 'POST']):
+    error = None
+    print "GOT HERE"
+    if request.method == 'POST':
+        if not request.form['name']:
+            error = 'You do not have a name'
+        elif not request.form['start_time']:
+            error = 'You do not have a start_time'
+        elif not request.form['duration']:
+            error = 'You do not have a duration'
+        elif not request.form['short_description']:
+            error = 'You do not have a short_description'
+        elif not request.form['long_description']:
+            error = 'You do not have a long_description'
+        elif not request.form['max_volunteers']:
+            error = 'You do not have a max_volunteers'
+        else:
+            t = Task(request.form['name'], request.form['start_time'], request.form['duration'], request.form['short_description'], request.form['long_description'], request.form['max_volunteers'])
+            db.session.add(p)
+            db.session.commit()
+            flash('You have successfully created a task!')
+            return redirect(url_for('admin_dashboard, project=project')) # + project.id))
+    return render_template('create_task.html', error=error, project=project)
+    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None

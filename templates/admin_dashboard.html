@@ -3,10 +3,10 @@
 {% block content %}
 
 hello this is a admin dashboard. Here are the projects:
-{{projects}}
+<!-- {{projects}} -->
 
 {% for project in projects %}
-    <li><a href="/admin_dashboard/<project>"> {{ project.name }} </a>
+    <li><a href="/admin_dashboard/{{project.id}}" > {{ project.name }} </a>
 </li>
 {% endfor %}
 
