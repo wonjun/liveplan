@@ -3,7 +3,7 @@ CREATE TABLE project (
 	name VARCHAR(80) NOT NULL,
 	description TEXT,
 	PRIMARY KEY (id)
-)
+);
 CREATE TABLE task (
 	id INTEGER NOT NULL,
 	task_name VARCHAR(160) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE task (
 	PRIMARY KEY (id),
 	FOREIGN KEY(project_id) REFERENCES project (id),
 	CHECK (completed IN (0, 1))
-)
+);
 CREATE TABLE volunteer (
 	id INTEGER NOT NULL,
 	project_id INTEGER NOT NULL,
@@ -26,10 +26,10 @@ CREATE TABLE volunteer (
 	PRIMARY KEY (id),
 	FOREIGN KEY(project_id) REFERENCES project (id),
 	UNIQUE (phone)
-)
+);
 CREATE TABLE assignment (
 	task_id INTEGER,
 	volunteer_id INTEGER,
 	FOREIGN KEY(task_id) REFERENCES task (id),
 	FOREIGN KEY(volunteer_id) REFERENCES volunteer (id)
-)
+);
