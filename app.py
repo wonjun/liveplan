@@ -126,6 +126,7 @@ def finish_task(volunteer_id, task_id):
     # mark task with 'id' as finished
     db.engine.execute('DELETE FROM assignment WHERE task_id=%s AND volunteer_id=%s' % (str(task_id), str(volunteer_id)))
     db.session.commit()
+    rows = db.engine.execute('SELECT * FROM assignment WHERE task_id=%s' % str(task_id))
 
 def accept_task(volunteer_id, task_id):
     # add task with 'id' to list of assigned tasks
@@ -142,5 +143,10 @@ def more_task(task_id):
     return models.Task.query.get(task_id)
 
 def get_user_by_phone(phone):
-    return models.Volunteer.query.filter(Volunteer.phone==phone).first()
+    return models.Volunteer.query.filter(models.Volunteer.phone==phone).first()
 
+def list_project_volunteers(project_id):
+    return models.Volunteer.query.filter(models.Volunteer.project_id==project_id).all()
+
+def list_project_tasks(project_id):
+    return models.Task.query.filter(models.Task.project_id==project_id).all()

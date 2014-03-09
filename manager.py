@@ -49,15 +49,17 @@ def seed():
             max_volunteers=5)
     db.session.add(t3)
     dt = dt + td
-    t = Task(task_name='Task #%s' % str(1), project_id=p2.id, start_time=(dt+td), duration=TASK_DURATION,
+    t4 = Task(task_name='Task #%s' % str(1), project_id=p2.id, start_time=(dt+td), duration=TASK_DURATION,
             short_description='Short description', long_description='This is a very long description',
             max_volunteers=5)
-    db.session.add(t)
+    db.session.add(t4)
     dt = dt + td
     db.session.commit()
     # Create Volunteers for this Project
     tasks = Task.query.filter_by(project_id=p1.id).all()
-    v = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='123-456-7890', tasks=[t1, t2, t3])
-    db.session.add(v)
+    v1 = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='1234567890', tasks=[t1, t2, t3])
+    db.session.add(v1)
+    v2 = Volunteer(project_id=p1.id, name='Superstar Volunteer #%s' % str(1), phone='1234567899', tasks=[t2, t3])
+    db.session.add(v2)
     db.session.commit()
     db.session.remove()
