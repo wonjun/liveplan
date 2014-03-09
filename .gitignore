@@ -63,3 +63,4 @@ docs/_build/
 .DS_Store
 
 keys.txt
+db/test.db
