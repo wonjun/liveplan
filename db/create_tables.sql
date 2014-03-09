@@ -15,8 +15,7 @@ CREATE TABLE task (
 	max_volunteers INTEGER NOT NULL,
 	completed BOOLEAN NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY(project_id) REFERENCES project (id),
-	CHECK (completed IN (0, 1))
+	FOREIGN KEY(project_id) REFERENCES project (id)
 );
 CREATE TABLE volunteer (
 	id INTEGER NOT NULL,
