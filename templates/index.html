@@ -6,7 +6,10 @@
 </div>
 <div class="welcome">
     <span>Liveplan</span><br><br><br><br>
-    <a class="secondary button" href="/login">Sign In!</a>
 </div>
-
+{% if not session.logged_in %}
+    {% include "login.html" %}
+  {% else %}
+    <div class ="login"><center><a class="secondary button" href="/admin_dashboard">Go to Dashboard</a></center></div>
+  {% endif %}
 {% endblock %}
