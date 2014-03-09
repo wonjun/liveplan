@@ -127,9 +127,9 @@ def create_task(project = None):
             db.session.add(t)
             db.session.commit()
             message = "New task, " + str(t.task_name) + " (" + str(t.id) + "), at " + str(t.start_time) + "for " + str(t.max_volunteers)
-            volunteers = list_project_volunteers(project):
-            if not volunteers:
-                for volunteer in list_project_volunteers(project):
+            volunteers = list_project_volunteers(project)
+            if volunteers:
+                for volunteer in volunteers:
                     twilio.send_text(volunteer.phone, twilio_api.FROM_NUMBER, message)
             flash('You have successfully created a task!')
             return redirect(url_for('admin_dashboard')) # + project.id))
