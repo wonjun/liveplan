@@ -26,6 +26,12 @@ SECRET_KEY = '\xf2v$@\xab\xbc\xfaw\x96\xbd\xa7~\x8f\xcc\xbaB\xe6\x82=9\x10&\x9b\
 app.config['USERNAME'] = 'admin'
 app.config['PASSWORD'] = 'default'
 
+def RepresentsInt(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 @app.route('/')
 def home(admin=None):
@@ -151,6 +157,8 @@ app.secret_key = SECRET_KEY
 def parse_received_texts(from_number, received_text):
     parsed_received_text = received_text.split()
     volunteer = get_user_by_phone(from_number)
+    if volunteer = None:
+        response = 'Unrecognized Volunteer Number'
     resp = twilio.twiml.Response()
     response = None
     if len(parsed_received_text) == 1:
@@ -169,6 +177,8 @@ def parse_received_texts(from_number, received_text):
         else:
             response = 'Invalid Command'
     elif len(parsed_received_text) == 2:
+        if not RepresentsInt(parsed_received_text[1]):
+            response = 'Invalid Command'
         command = parsed_received_text[0]
         task_id = int(parsed_received_text[1])
         task = more_task(task_id)
