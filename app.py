@@ -165,7 +165,7 @@ def parse_received_texts(from_number, received_text):
             if not tasks:
                 response = 'You currently have no available tasks'
             for (task_name, task_id, task_short) in tasks:
-                response += task_name + "(" + task_id + "): " + task_short + "\n"
+                response += task_name + "(" + str(task_id) + "): " + task_short + "\n"
         else:
             response = 'Invalid Command'
     elif len(parsed_received_text) == 2:
