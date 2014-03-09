@@ -5,6 +5,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import *
 from twilio_api import send_text
+import twilio_api
 import twilio.twiml
 from datetime import datetime
 
@@ -130,7 +131,7 @@ def create_task(project = None):
             volunteers = list_project_volunteers(project)
             if volunteers:
                 for volunteer in volunteers:
-                    twilio_api.send_text(volunteer.phone, twilio_api.FROM_NUMBER, message)
+                    send_text(volunteer.phone, twilio_api.FROM_NUMBER, message)
             flash('You have successfully created a task!')
             return redirect(url_for('admin_dashboard')) # + project.id))
     return render_template('create_task.html', error=error, pid=project)
