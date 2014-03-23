@@ -1,4 +1,4 @@
-liveplan
+Liveplan
 ========
 
 Agile Event Management
